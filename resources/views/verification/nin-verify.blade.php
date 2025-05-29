@@ -122,6 +122,11 @@
                                                 class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>&nbsp;
                                                 Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})</a>
                                         </div>
+                                        <div class="mb-2">
+                                            <a href="#" id="regularSlip" type="button"
+                                                class="btn btn-info btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

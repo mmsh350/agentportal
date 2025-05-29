@@ -51,12 +51,12 @@ $("#verifyBVN").on("click", function (event) {
          <tbody>
             <tr>
                <th scope="row" rowspan="9">
-                  <img class="rounded" src="data:image/;base64, ${result.data.photo}" alt="User Image" style="width: 250px; height: 250px;">
+                  <img class="rounded" src="data:image/;base64, ${result.data.image}" alt="User Image" style="width: 250px; height: 250px;">
                </th>
             </tr>
             <tr>
                <th scope="row" style="text-align:right; border: none ! important;">BVN</th>
-               <td style="text-align:left" ><span id="bvnno" >${result.data.bvn}</span>
+               <td style="text-align:left" ><span id="bvnno" >${result.data.idNumber}</span>
                </td>
             </tr>
             <tr>
@@ -76,7 +76,7 @@ $("#verifyBVN").on("click", function (event) {
             </tr>
             <tr>
                <th scope="row" style="text-align:right; border: none ! important;">Phone No</th>
-               <td  style="text-align:left">${result.data.phoneNumber}
+               <td  style="text-align:left">${result.data.mobile}
                </td>
             </tr>
             <tr>

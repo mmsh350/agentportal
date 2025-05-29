@@ -40,7 +40,6 @@ $("#verifyNIN").on("click", function (event) {
             if (result && result.data) {
                 validationInfo.innerHTML = `
             <div class="border border-light">
-
    <div class="table-responsive">
       <table class="table">
          <thead >
@@ -54,7 +53,7 @@ $("#verifyNIN").on("click", function (event) {
          <tbody>
             <tr>
                <th scope="row" rowspan="9">
-                  <img class="rounded" src="data:image/;base64, ${result.data.image}" alt="User Image" style="width: 250px; height: 250px;">
+                  <img class="rounded" src="data:image/;base64, ${result.data.photo}" alt="User Image" style="width: 250px; height: 250px;">
                </th>
             </tr>
             <tr>
@@ -64,7 +63,7 @@ $("#verifyNIN").on("click", function (event) {
             </tr>
             <tr>
                <th scope="row" style="text-align:right; border: none ! important;">FirstName</th>
-               <td  style="text-align:left">${result.data.firstname}
+               <td  style="text-align:left">${result.data.firstName}
                </td>
             </tr>
             <tr>
@@ -74,12 +73,12 @@ $("#verifyNIN").on("click", function (event) {
             </tr>
             <tr>
                <th scope="row" style="text-align:right; border: none ! important;">Middle Name</th>
-               <td  style="text-align:left">${result.data.middlename}
+               <td  style="text-align:left">${result.data.middleName}
                </td>
             </tr>
             <tr>
                <th scope="row" style="text-align:right; border: none ! important;">Phone No</th>
-               <td  style="text-align:left">${result.data.telephoneno}
+               <td  style="text-align:left">${result.data.telephoneNo}
                </td>
             </tr>
             <tr>

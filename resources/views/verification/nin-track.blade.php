@@ -114,20 +114,27 @@
                                 <div style="display:none;" id="downloadDiv">
                                     <div class="col-md-12 ">
                                         <div class="btn-list text-center" id="download">
+                                            <div class="mb-2 mr-2">
                                             <a href="#" id="regularSlip" type="button"
-                                                class="btn btn-primary btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                class="btn btn-info btn-wave"><i class="bi bi-download"></i>&nbsp;
                                                 Regular NIN Slip
                                                 (&#x20A6;{{ $regular_nin_fee->amount }})</a>
+                                            </div>
+
+                                                <div class="mb-2 mr-2">
+                                                    <a href="#" id="standardSlip" type="button"
+                                                        class="btn btn-primary btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                        Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})</a>
+                                                </div>
+                                                <div class="mb-2">
+                                                    <a href="#" id="premiumSlip" type="button"
+                                                        class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                        Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})</a>
+                                                </div>
                                         </div>
 
                                     </div>
-                                    <div class="col-md-12 mt-4">
-                                        <center> <span class="text-danger pt-3">To access additional slip formats,
-                                                please
-                                                use your NIN
-                                                number to download from the NIN Verification module</span>
-                                        </center>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
