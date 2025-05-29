@@ -842,21 +842,11 @@ class VerificationController extends Controller
                     $this->transactionService->createTransaction($loginUserId, $ServiceFee, 'NIN Personalize', $serviceDesc,  'Wallet', 'Approved');
 
                     return json_encode(['status' => 'success', 'data' => $data]);
-                } else if ($response['respCode'] == '103') {
-
-
-                    // $balance = $wallet->balance - $ServiceFee;
-
-                    // Wallet::where('user_id', $this->loginId)
-                    //     ->update(['balance' => $balance]);
-
-                    // $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
-
-                    // $this->transactionService->createTransaction($loginUserId, $ServiceFee, 'NIN Verification', $serviceDesc,  'Wallet', 'Approved');
+                }  else if (isset($response['message'])) {
 
                     return response()->json([
                         'status' => 'Not Found',
-                        'errors' => ['Succesfully Verified with ( NIN do not exist)'],
+                        'errors' => [$response['message']],
                     ], 422);
                 } else {
                     return response()->json([
