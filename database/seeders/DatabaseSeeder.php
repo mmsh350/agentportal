@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
 
 
         User::updateOrCreate(
-            ['email' => 'admin@nintrust.com.ng'],
+            ['email' => 'admin@agentportal.ng'],
             [
-                'name' => 'NIN TRUST Admin',
+                'name' => 'Agent Portal',
                 'email_verified_at' => now(),
                 'password' => Hash::make('@passwd12345'),
                 'role' => 'admin',

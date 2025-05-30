@@ -17,8 +17,8 @@ class SiteSettingFactory extends Factory
     public function definition(): array
     {
         return [
-            'site_name' => 'NIN TRUST',
-            'short_name' => 'NIN TRUST',
+            'site_name' => 'AGENT PORTAL',
+            'short_name' => 'AGENT PORTAL',
             'logo' => 'logo.png',
             'mini_logo' => 'mini-logo.png',
             'login_background_image' => 'login-bg-1.jpg',
