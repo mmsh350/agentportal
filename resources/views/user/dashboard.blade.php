@@ -183,13 +183,16 @@
                         <h4 class="fw-light mb-4 text-center">Our Services</h4>
                         <div class="row g-4">
                             <!-- Service 1 -->
+                            
+  <!-- Service 1 -->
                             <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
                                             <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
                                                 style="width: 70px; height: 70px;">
-                                                <i class="bi bi-fingerprint text-white" style="font-size: 35px;"></i>
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 40px; max-height: 40px;">
                                             </div>
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify NIN</h5>
@@ -198,6 +201,7 @@
                                 </div>
                             </div>
 
+
                             <!-- Service 1 -->
                             <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
@@ -205,7 +209,8 @@
                                         <div class="icon-box mb-3">
                                             <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
                                                 style="width: 70px; height: 70px;">
-                                                <i class="bi bi-phone text-white" style="font-size: 35px;"></i>
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 40px; max-height: 40px;">
                                             </div>
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify NIN Phone</h5>
@@ -214,13 +219,15 @@
                                 </div>
                             </div>
 
+
                             <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
                                             <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
                                                 style="width: 70px; height: 70px;">
-                                                <i class="bi bi-search text-white" style="font-size: 35px;"></i>
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 40px; max-height: 40px;">
                                             </div>
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">IPE</h5>
@@ -229,6 +236,7 @@
                                 </div>
                             </div>
 
+
                             <!-- Service 2 -->
                             <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
@@ -236,7 +244,8 @@
                                         <div class="icon-box mb-3">
                                             <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
                                                 style="width: 70px; height: 70px;">
-                                                <i class="bi bi-fingerprint text-white" style="font-size: 35px;"></i>
+                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="Logo"
+                                                    style="max-width: 40px; max-height: 40px;">
                                             </div>
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify BVN</h5>
@@ -246,13 +255,15 @@
                             </div>
 
 
+
                             <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
                                             <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
                                                 style="width: 70px; height: 70px;">
-                                                <i class="bi bi-search text-white" style="font-size: 35px;"></i>
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 40px; max-height: 40px;">
                                             </div>
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Personalize</h5>
