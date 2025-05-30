@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 
-Route::post('/palmpay/webhook', [PaymentWebhookController::class, 'handlePalmPay']);
+Route::post('/monnify/webhook', [PaymentWebhookController::class, 'handleWebhook']);
 
 Route::post('/update-bvn-enrollment-status', [EnrollmentSyncController::class, 'updateStatus']);
 
@@ -40,13 +40,14 @@ Route::middleware(['auth', 'user.active'])->group(function () {
     Route::group(['as' => 'user.', 'prefix' => 'user'], function () {
 
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::post('/verify-user', [VerificationController::class, 'verifyUser'])->name('verify-user');
+        Route::get('/verify-user', [VerificationController::class, 'createAccounts'])->name('verify-user');
 
         Route::middleware(['user.active', 'user.is_kyced'])->group(function () {
             Route::get('/verify-nin', [VerificationController::class, 'ninVerify'])->name('verify-nin');
             Route::get('/verify-nin-phone', [VerificationController::class, 'phoneVerify'])->name('verify-nin-phone');
             Route::get('/verify-bvn', [VerificationController::class, 'bvnVerify'])->name('verify-bvn');
             Route::get('/nin-personalize', [VerificationController::class, 'ninPersonalize'])->name('personalize-nin');
+            Route::get('/nin-personalize-auto/{id}', [VerificationController::class, 'ninPersonalize'])->name('personalize-nin-auto');
             Route::get('/ipe', [VerificationController::class, 'showIpe'])->name('ipe');
             Route::get('/bvn-enrollment', [EnrollmentController::class, 'bvnEnrollment'])->name('bvn-enrollment');
 

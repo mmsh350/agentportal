@@ -261,7 +261,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-6 col-md-6 col-lg-4">
+                            {{-- <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
@@ -274,38 +274,8 @@
                                         <a href="{{ route('user.bvn-enrollment') }}" class="stretched-link"></a>
                                     </div>
                                 </div>
-                            </div>
-                            {{-- <!-- Service 3 -->
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
-                                                <i class="bi bi-arrow-repeat text-white" style="font-size: 35px;"></i>
-                                            </div>
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">BVN Modification</h5>
-                                        <a href="#" class="stretched-link"></a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Service 4 -->
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
-                                                <i class="bi bi-arrow-left-right text-white" style="font-size: 35px;"></i>
-                                            </div>
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">CRM Request</h5>
-                                        <a href="#" class="stretched-link"></a>
-                                    </div>
-                                </div>
                             </div> --}}
+
                         </div>
                     </div>
                 </div>
@@ -462,7 +432,8 @@
                                         <li class="account-item mb-3 p-2">
                                             <div class="d-flex align-items-start">
                                                 <div class="bank-logo me-3">
-                                                    <img src="{{ asset('assets/images/' . strtolower(str_replace(' ', '', $data->bankName)) . '.png') }}"
+                                                    <img width="80px" height="80px" style="object-fit: contain;"
+                                                        src="{{ asset('assets/images/' . strtolower($data->bankName) . '.png') }}"
                                                         alt="{{ $data->bankName }} logo">
                                                 </div>
                                                 <div class="flex-fill">
@@ -496,6 +467,10 @@
                                         <i class="mdi mdi-wallet-outline mdi-36px" style="font-size:24px"></i>
                                     </h4>
                                 </a>
+
+                                @if (!auth()->user()->vwallet_is_created)
+                                    <a href="{{ route('user.verify-user') }}">Genearte Virtual accounts</a>
+                                @endif
                             </center>
 
                         </div>

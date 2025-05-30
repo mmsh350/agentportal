@@ -70,9 +70,11 @@ class AuthController extends Controller
             $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone_number' => $request->phone_number,
                 'password' => Hash::make($request->password),
                 'referral_code' => $referralDetails['myOwnCode'],
                 'referred_by' => $referralDetails['referral_id'],
+                'kyc_status' => 'Verified',
             ]);
             // Commit the transaction
             DB::commit();

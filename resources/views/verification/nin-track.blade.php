@@ -16,6 +16,7 @@
             align-items: center;
             font-size: 18px;
             z-index: 9999;
+            flex-direction: column;
         }
 
         #overlay button {
@@ -77,8 +78,9 @@
                                             </div>
                                             <div class="col-md-12 ">
                                                 <p class="mb-2 text-muted">Tracking Number</p>
-                                                <input type="text" id="nin" name="trackingId" value=""
-                                                    class="form-control text-center" maxlength="15" required />
+                                                <input type="text" id="nin" name="trackingId"
+                                                    value="{{ $auto }}" class="form-control text-center"
+                                                    maxlength="15" required />
                                             </div>
 
                                         </div>
@@ -115,22 +117,22 @@
                                     <div class="col-md-12 ">
                                         <div class="btn-list text-center" id="download">
                                             <div class="mb-2 mr-2">
-                                            <a href="#" id="regularSlip" type="button"
-                                                class="btn btn-info btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Regular NIN Slip
-                                                (&#x20A6;{{ $regular_nin_fee->amount }})</a>
+                                                <a href="#" id="regularSlip" type="button"
+                                                    class="btn btn-info btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                    Regular NIN Slip
+                                                    (&#x20A6;{{ $regular_nin_fee->amount }})</a>
                                             </div>
 
-                                                <div class="mb-2 mr-2">
-                                                    <a href="#" id="standardSlip" type="button"
-                                                        class="btn btn-primary btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                        Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})</a>
-                                                </div>
-                                                <div class="mb-2">
-                                                    <a href="#" id="premiumSlip" type="button"
-                                                        class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                        Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})</a>
-                                                </div>
+                                            <div class="mb-2 mr-2">
+                                                <a href="#" id="standardSlip" type="button"
+                                                    class="btn btn-primary btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                    Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})</a>
+                                            </div>
+                                            <div class="mb-2">
+                                                <a href="#" id="premiumSlip" type="button"
+                                                    class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>&nbsp;
+                                                    Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})</a>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -143,42 +145,78 @@
             </div>
         </div>
     </div>
-    <div id="overlay">
+
+    <div id="overlay" style="display: none;">
         <div class="text-center">
-            <p>To use this page, pop-ups must be enabled. Please allow pop-ups for this site.</p>
+            <p>Pop-ups are blocked. Please enable them to continue.</p>
             <button onclick="enablePopups()">Allow Pop-ups</button>
         </div>
     </div>
-    <div id="responsive-overlay"></div>
+
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/nin-track.js') }}"></script>
     <script>
-        function enablePopups() {
-            const testPopup = window.open('', '_blank', 'width=1,height=1');
-            if (testPopup === null || typeof testPopup === 'undefined') {
-                alert("Pop-ups are still blocked. Please allow pop-ups in your browser settings.");
-            } else {
+        @if ($auto)
+            $("#verifyNIN").trigger("click");
+        @endif
+    </script>
 
-                testPopup.close();
-                localStorage.setItem('popupsAllowed', 'true');
-                document.getElementById('overlay').style.display = 'none';
-                window.location.reload();
-            }
-        }
-        window.onload = function() {
+    <script>
+        function checkPopupStatus() {
+
             if (localStorage.getItem('popupsAllowed') === 'true') {
                 document.getElementById('overlay').style.display = 'none';
-                return;
+                return true;
             }
-            const testPopup = window.open('', '_blank', 'width=1,height=1');
-            if (testPopup === null || typeof testPopup === 'undefined') {
+
+            return false;
+        }
+
+
+        function testPopups() {
+            try {
+                const testPopup = window.open('', '_blank', 'width=1,height=1,left=-9999,top=-9999');
+                if (testPopup && !testPopup.closed) {
+                    testPopup.close();
+                    localStorage.setItem('popupsAllowed', 'true');
+                    return true;
+                }
+            } catch (e) {
+                console.error("Popup test failed:", e);
+            }
+            return false;
+        }
+
+
+        function showOverlayIfBlocked() {
+            if (checkPopupStatus()) return;
+
+            if (!testPopups()) {
                 document.getElementById('overlay').style.display = 'flex';
             } else {
-                testPopup.close();
-                localStorage.setItem('popupsAllowed', 'true');
                 document.getElementById('overlay').style.display = 'none';
             }
-        };
+        }
+
+
+        function enablePopups() {
+            if (testPopups()) {
+                document.getElementById('overlay').style.display = 'none';
+            } else {
+                alert(
+                    "Pop-ups are still blocked. Please:\n1. Click the popup blocker icon in your address bar\n2. Select 'Always allow pop-ups from this site'\n3. Refresh the page"
+                );
+            }
+        }
+
+
+        window.addEventListener('DOMContentLoaded', function() {
+
+            if (!checkPopupStatus()) {
+
+                setTimeout(showOverlayIfBlocked, 500);
+            }
+        });
     </script>
 @endpush

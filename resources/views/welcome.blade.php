@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIN TRUST - Identity Verification Solutions</title>
+    <title>AGENT PORTAL - Identity Verification Solutions</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="icon" href="{{ asset('assets/images/img/logo.png') }}" type="image">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -86,24 +88,56 @@
         <div class="loader"></div>
     </div>
 
+
     <!-- Navigation -->
-    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50">
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm sticky top-0 z-50" x-data="{ open: false }">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex-shrink-0 flex items-center">
-                    <img src="{{ asset('assets/images/img/logo.png') }}" alt="NIN TRUST Logo" class="h-8 w-auto">
-                    <span class="ml-2 text-xl font-semibold text-gray-700">NIN TRUST</span>
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo + Brand -->
+                <div class="flex items-center">
+                    <img src="{{ asset('assets/images/img/logo.png') }}" alt="AGENT PORTAL Logo" class="h-8 w-auto">
+                    <span class="ml-2 text-xl font-semibold text-gray-700">AGENT PORTAL</span>
                 </div>
-                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+
+                <!-- Desktop Nav -->
+                <div class="hidden sm:flex space-x-8">
                     <a href="#" class="text-gray-900 brand-border px-1 pt-1 text-sm font-medium">Home</a>
                     <a href="#services"
                         class="text-gray-600 hover:text-gray-900 px-1 pt-1 text-sm font-medium">Services</a>
                     <a href="#contact"
                         class="text-gray-600 hover:text-gray-900 px-1 pt-1 text-sm font-medium">Contact</a>
                 </div>
+
+                <!-- Hamburger Button (Mobile) -->
+                <div class="sm:hidden flex items-center">
+                    <button @click="open = !open" class="text-gray-700 hover:text-gray-900 focus:outline-none">
+                        <svg x-show="!open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        <svg x-show="open" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor" style="display: none;">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="sm:hidden" x-show="open" @click.outside="open = false" x-transition>
+            <div class="px-4 pt-2 pb-3 space-y-1">
+                <a href="#" class="block text-gray-900 px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#services"
+                    class="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium">Services</a>
+                <a href="#contact"
+                    class="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium">Contact</a>
             </div>
         </div>
     </nav>
+
 
     <!-- Main Content -->
     <main class="overflow-hidden">
@@ -113,7 +147,7 @@
                 <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
                     <div class="lg:col-span-6 text-center lg:text-left">
                         <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gray-900">
-                            Secure Verification Services by <span class="brand-color">NIN TRUST</span>
+                            Secure Verification Services by <span class="brand-color">AGENT PORTAL</span>
                         </h1>
                         <p class="mt-4 text-lg sm:text-xl text-gray-600">
                             Professional Verification and agency services. Fast, reliable, and secure.
@@ -228,7 +262,7 @@
                             <h3 class="text-lg font-semibold text-gray-900">Support Information</h3>
                             <div class="mt-4 space-y-2 text-gray-600">
                                 <p>Email: <a href="mailto:support@nintrust.gov.ng"
-                                        class="brand-color hover:underline">nintrust001@gmail.com</a></p>
+                                        class="brand-color hover:underline">agentportal@gmail.com</a></p>
                                 <p>Phone: <a href="tel:+234700NINTRUST"
                                         class="brand-color hover:underline">XX-XXX-XXXX</a></p>
                             </div>
@@ -291,7 +325,7 @@
             </div>
             <div class="mt-8 border-t border-gray-700 pt-8 text-center">
                 <p class="text-xs text-gray-500">
-                    &copy; {{ date('Y') }} NIN TRUST. All rights reserved.
+                    &copy; {{ date('Y') }} AGENT PORTAL. All rights reserved.
                 </p>
                 <p class="text-xs text-gray-500 mt-1">
                     Identity verification partner

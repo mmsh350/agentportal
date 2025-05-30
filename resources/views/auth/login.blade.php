@@ -83,11 +83,13 @@
                             Don't have an account? <a href="{{ route('auth.register') }}" class="text-primary">Create</a>
                         </div>
                     </form>
+                    <p class="text-center mt-2"> <a href="/">Go to Back</a></p>
                 </div>
             </div>
 
             <!-- Right side (Image or background) -->
-            <div class="col-lg-6 login-half-bg d-none d-lg-flex flex-row"  style="background: url('{{ asset('assets/images/' . ($settings->login_background_image ?? 'login-bg.jpg')) }}') no-repeat center center !important; background-size: cover !important;">
+            <div class="col-lg-6 login-half-bg d-none d-lg-flex flex-row"
+                style="background: url('{{ asset('assets/images/' . ($settings->login_background_image ?? 'login-bg.jpg')) }}') no-repeat center center !important; background-size: cover !important;">
                 <p class="text-white fw-medium text-center flex-grow align-self-end">Copyright &copy; {{ date('Y') }}
                     All rights reserved.</p>
             </div>

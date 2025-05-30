@@ -91,7 +91,7 @@
                                                             <th width="5%" scope="col">ID</th>
                                                             <th scope="col">Request Tracking No.</th>
                                                             <th scope="col">Reply</th>
-                                                            <th scope="col" class="text-center">Response</th>
+                                                            <th scope="col" class="text-center">Status</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -100,13 +100,24 @@
                                                             <tr>
                                                                 <th scope="row">{{ $serialNumber++ }}</th>
                                                                 <td>{{ $data->trackingId }}</td>
-                                                                <td>{{ $data->reply }}</td>
+                                                                <td>
+                                                                    {{ $data->reply }}
+                                                                    <div>
+                                                                        <a href="{{ route('user.personalize-nin-auto', $data->trackingId) }}"
+                                                                            class="text-primary text-decoration-none small">
+                                                                            <i class="bi bi-pencil-square"></i> Personalize
+                                                                        </a>
+                                                                    </div>
+                                                                </td>
+
                                                                 <td class="text-center">
                                                                     @if (is_null($data->reply))
                                                                         <a href="{{ route('user.ipeStatus', [$data->trackingId]) }}"
                                                                             class="btn btn-sm btn-primary">
                                                                             Check Status
                                                                         </a>
+                                                                    @else
+                                                                        Completed
                                                                     @endif
                                                                 </td>
                                                             </tr>

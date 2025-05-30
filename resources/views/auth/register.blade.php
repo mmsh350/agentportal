@@ -18,9 +18,9 @@
         <div class="row flex-grow">
             <div class="col-lg-6 d-flex align-items-center justify-content-center">
                 <div class="auth-form-transparent text-start p-3">
-                    <div class="brand-logo">
+                    {{-- <div class="brand-logo">
                         <img src="{{ asset('assets/images/' . $settings->logo ?? 'assets/images/logo.svg') }}" alt="logo">
-                    </div>
+                    </div> --}}
                     <h4>New here?</h4>
                     <h6 class="fw-light">Join us today! It takes only a few steps</h6>
 
@@ -28,6 +28,46 @@
 
                     <form method="POST" action="{{ route('auth.register') }}" class="pt-3 needs-validation" novalidate>
                         @csrf
+
+                        <div class="form-group">
+                            <label for="fullname">Full Name</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend bg-transparent">
+                                    <span class="input-group-text bg-transparent border-right-0">
+                                        <i class="mdi mdi-account-outline text-primary"></i>
+                                    </span>
+                                </div>
+                                <input type="text"
+                                    class="form-control form-control-lg border-left-0 @error('name') is-invalid @enderror"
+                                    id="name" name="name" placeholder="Full Name" value="{{ old('name') }}"
+                                    required>
+                                @error('name')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend bg-transparent">
+                                    <span class="input-group-text bg-transparent border-right-0">
+                                        <i class="mdi mdi-phone-outline text-primary"></i>
+                                    </span>
+                                </div>
+                                <input type="tel"
+                                    class="form-control form-control-lg border-left-0 @error('phone_number') is-invalid @enderror"
+                                    id="phone_number" name="phone_number" maxlength="11" placeholder="Phone Number"
+                                    value="{{ old('phone_number') }}" required>
+                                @error('phone_number')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
 
                         <!-- Email -->
                         <div class="form-group">
@@ -138,7 +178,8 @@
             </div>
 
             <!-- Right side (Image or background) -->
-            <div class="col-lg-6 register-half-bg d-none d-lg-flex flex-row" style="background: url('{{ asset('assets/images/' . ($settings->registration_background_image ?? 'register-bg.jpg')) }}') no-repeat center center !important; background-size: cover !important;">
+            <div class="col-lg-6 register-half-bg d-none d-lg-flex flex-row"
+                style="background: url('{{ asset('assets/images/' . ($settings->registration_background_image ?? 'register-bg.jpg')) }}') no-repeat center center !important; background-size: cover !important;">
                 <p class="text-white fw-medium text-center flex-grow align-self-end">Copyright &copy; {{ date('Y') }}
                     All rights reserved.</p>
             </div>
