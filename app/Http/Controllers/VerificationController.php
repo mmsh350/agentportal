@@ -7,6 +7,7 @@ use App\Http\Repositories\BVN_PDF_Repository;
 use App\Http\Repositories\VirtualAccountRepository;
 use App\Http\Repositories\WalletRepository;
 use App\Models\IpeRequest;
+use App\Models\NinValidation;
 use App\Models\Service;
 use App\Models\Verification;
 use App\Models\Wallet;
@@ -47,7 +48,22 @@ class VerificationController extends Controller
 
         return view('verification.ipe', compact('ServiceFee',  'ipes'));
     }
+    public function showNinValidation()
+    {
+        $serviceCodes = ['114'];
+        $services = Service::whereIn('service_code', $serviceCodes)
+            ->get()
+            ->keyBy('service_code');
 
+        $ServiceFee = $services->get('114') ?? 0.00;
+
+        $validations = NinValidation::where('user_id',  $this->loginId)
+            ->orderBy('id', 'desc')
+            ->paginate(5);
+
+
+        return view('verification.nin-validation', compact('ServiceFee',  'validations'));
+    }
     public function ninPersonalize($auto = false)
     {
         $serviceCodes = ['108', '105', '106', '107'];
@@ -539,6 +555,63 @@ class VerificationController extends Controller
         }
     }
 
+    public function ninValidation(Request $request)
+    {
+        $request->validate([
+            'nin_number' => 'required|digits:11',
+            'description' => 'required|string',
+        ]);
+
+        //NIN Services Fee
+        $ServiceFee = 0;
+
+        $ServiceFee = Service::where('service_code', '114')
+            ->where('status', 'enabled')
+            ->first();
+
+        if (!$ServiceFee)
+            return redirect()->route('user.nin-validation')
+                ->with('error', 'Sorry Action not Allowed !');
+
+        $ServiceFee = $ServiceFee->amount;
+
+        $loginUserId = auth()->user()->id;
+
+        //Check if wallet is funded
+        $wallet = Wallet::where('user_id', $loginUserId)->first();
+        $wallet_balance = $wallet->balance;
+        $balance = 0;
+
+        if ($wallet_balance < $ServiceFee) {
+
+            return redirect()->route('user.nin-validation')
+                ->with('error', 'Sorry Wallet Not Sufficient for Transaction !');
+        } else {
+
+            $balance = $wallet_balance - $ServiceFee;
+
+            Wallet::where('user_id', $loginUserId)
+            ->update(['balance' => $balance]);
+
+           $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
+
+           $trx_id = $this->transactionService->createTransaction($loginUserId, $ServiceFee, 'NIN Validation Request', $serviceDesc,  'Wallet', 'Approved');
+           $refno = $this->transactionService->generateReferenceNumber();
+
+           // Save NIN validation
+            NinValidation::create([
+                'user_id' => $loginUserId,
+                'tnx_id' => $trx_id->id,
+                'refno' => $refno,
+                'nin_number'  => $request->nin_number,
+                'description' => $request->description,
+            ]);
+
+            return redirect()->route('user.nin-validation')
+            ->with('success', 'Validation submitted successfully !');
+
+        }
+    }
     public function ipeRequest(Request $request)
     {
         $request->validate([

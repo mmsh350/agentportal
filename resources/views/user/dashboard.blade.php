@@ -295,6 +295,20 @@
                                 </div>
                             </div>
 
+                            <div class="col-6 col-md-6 col-lg-4">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-body text-center p-3">
+                                        <div class="icon-box mb-3">
+
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 100px; max-height: 100px;">
+
+                                        </div>
+                                        <h5 class="icon-box-title mb-0 fw-bold">NIN Validation</h5>
+                                        <a href="{{ route('user.nin-validation')}}" class="stretched-link"></a>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
                     </div>

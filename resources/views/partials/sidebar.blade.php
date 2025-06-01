@@ -59,6 +59,12 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.nin-validation') ? 'active' : '' }}" href="{{route('user.nin-validation')}}">
+                <i class="mdi mdi-sync menu-icon"></i>
+                <span class="menu-title">NIN Validation</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}" href="{{ route('user.verify-nin-phone') }}">
@@ -80,14 +86,6 @@
                 <span class="menu-title">NIN Personalize</span>
             </a>
         </li>
-
-        <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="#">
-                <i class="mdi mdi-sync menu-icon"></i>
-                <span class="menu-title">Instant Validation</span>
-            </a>
-        </li>
-
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('user.support') }}">

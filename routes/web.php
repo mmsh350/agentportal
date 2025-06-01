@@ -45,7 +45,9 @@ Route::middleware(['auth', 'user.active'])->group(function () {
         Route::middleware(['user.active', 'user.is_kyced'])->group(function () {
             Route::get('/verify-nin', [VerificationController::class, 'ninVerify'])->name('verify-nin');
             Route::get('/verify-nin-phone', [VerificationController::class, 'phoneVerify'])->name('verify-nin-phone');
+
             Route::get('/verify-bvn', [VerificationController::class, 'bvnVerify'])->name('verify-bvn');
+
             Route::get('/nin-personalize', [VerificationController::class, 'ninPersonalize'])->name('personalize-nin');
             Route::get('/nin-personalize-auto/{id}', [VerificationController::class, 'ninPersonalize'])->name('personalize-nin-auto');
             Route::get('/ipe', [VerificationController::class, 'showIpe'])->name('ipe');
@@ -56,6 +58,9 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::post('/ipe-request', [VerificationController::class, 'ipeRequest'])->name('ipe-request');
             Route::get('/ipeStatus/{id}', [VerificationController::class, 'ipeRequestStatus'])->name('ipeStatus');
 
+            //NIN Validation
+            Route::get('/nin-validation', [VerificationController::class, 'showNinValidation'])->name('nin-validation');
+            Route::post('nin-validation-request', [VerificationController::class, 'ninValidation'])->name('nin-validation-request');
 
             //Enrollment-----------------------------------------------------------------------------------------------------
             Route::post('/bvn-enrollment', [EnrollmentController::class, 'enrollBVN'])->name('enroll-bvn');
