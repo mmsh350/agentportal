@@ -367,7 +367,7 @@ class VerificationController extends Controller
                 //Log response
                 Log::info('NIN DEMO Vericiation', $response);
 
-                if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] !== self::RESP_MESSAGE) {
+                if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] !== "norecord") {
 
                     $data = $response['message'];
 
@@ -387,7 +387,7 @@ class VerificationController extends Controller
 
                     return response()->json([
                         'status' => 'Not Found',
-                        'errors' => ['Succesfully Verified with ( No record found)'],
+                        'errors' => ['No record found'],
                     ], 422);
                 }else if(isset($response['status']) && $response['status'] === 'caption'){
 
