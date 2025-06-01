@@ -30,74 +30,130 @@ $("#verifyNIN").on("click", function (event) {
         cache: false,
         beforeSend: function () {
             showLoader();
-            $("#download").hide();
+            $("#download").addClass("d-none");
         },
         success: function (result) {
             $("#loader").hide();
 
             if (result && result.data) {
-                validationInfo.innerHTML = `
-            <div class="border border-light">
-   <div class="table-responsive">
-   <center><span class="text-danger mt-4" style="margin-top:5px; padding-top:3px;">${result.data.message}</span></center>
-      <table class="table">
-         <thead >
-            <tr>
-               <th style="border: none ! important;" width="20%"></th>
-               <th style="border: none ! important;"></th>
-               <th style="border: none ! important;"></th>
-               <th style="border: none ! important;"></th>
-            </tr>
-         </thead>
-         <tbody>
-            <tr>
-               <th scope="row" rowspan="9">
-                  <img class="rounded" src="data:image/;base64, ${result.data.face}" alt="User Image" style="width: 250px; height: 250px;">
-               </th>
-            </tr>
-              <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Tracking Number</th>
-               <td  style="text-align:left">${result.data.trackingid}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">NIN</th>
-               <td style="text-align:left" ><span id="nin_no" >${result.data.nin}</span>
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">FirstName</th>
-               <td  style="text-align:left">${result.data.firstname}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Surname</th>
-               <td  style="text-align:left">${result.data.lastname}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Middle Name</th>
-               <td  style="text-align:left">${result.data.middlename}
-               </td>
-            </tr>
-            <tr>
-                <th scope="row" style="text-align:right; border: none !important;">Gender</th>
-                <td style="text-align:left">
-                    ${result.data.gender === 'm' ? 'Male' : result.data.gender === 'f' ? 'Female' : 'Not Specified'}
-                </td>
-            </tr>
+//                 validationInfo.innerHTML = `
+//             <div class="border border-light">
+//    <div class="table-responsive">
+//    <center><span class="text-danger mt-4" style="margin-top:5px; padding-top:3px;">${result.data.message}</span></center>
+//       <table class="table">
+//          <thead >
+//             <tr>
+//                <th style="border: none ! important;" width="20%"></th>
+//                <th style="border: none ! important;"></th>
+//                <th style="border: none ! important;"></th>
+//                <th style="border: none ! important;"></th>
+//             </tr>
+//          </thead>
+//          <tbody>
+//             <tr>
+//                <th scope="row" rowspan="9">
+//                   <img class="rounded" src="data:image/;base64, ${result.data.face}" alt="User Image" style="width: 250px; height: 250px;">
+//                </th>
+//             </tr>
+//               <tr>
+//                <th scope="row" style="text-align:right; border: none ! important;">Tracking Number</th>
+//                <td  style="text-align:left">${result.data.trackingid}
+//                </td>
+//             </tr>
+//             <tr>
+//                <th scope="row" style="text-align:right; border: none ! important;">NIN</th>
+//                <td style="text-align:left" ><span id="nin_no" >${result.data.nin}</span>
+//                </td>
+//             </tr>
+//             <tr>
+//                <th scope="row" style="text-align:right; border: none ! important;">FirstName</th>
+//                <td  style="text-align:left">${result.data.firstname}
+//                </td>
+//             </tr>
+//             <tr>
+//                <th scope="row" style="text-align:right; border: none ! important;">Surname</th>
+//                <td  style="text-align:left">${result.data.lastname}
+//                </td>
+//             </tr>
+//             <tr>
+//                <th scope="row" style="text-align:right; border: none ! important;">Middle Name</th>
+//                <td  style="text-align:left">${result.data.middlename}
+//                </td>
+//             </tr>
+//             <tr>
+//                 <th scope="row" style="text-align:right; border: none !important;">Gender</th>
+//                 <td style="text-align:left">
+//                     ${result.data.gender === 'm' ? 'Male' : result.data.gender === 'f' ? 'Female' : 'Not Specified'}
+//                 </td>
+//             </tr>
 
+//             <tr>
+//                <th scope="row" style="text-align:right;">Address</th>
+//                <td  style="text-align:left">${result.data.address}
+//                </td>
+//             </tr>
+//          </tbody>
+//       </table>
+//    </div>
+// </div>
+//             `;
+
+validationInfo.innerHTML = `
+<div class="border border-light p-3">
+  <div class="row">
+    <div class="col-md-4 text-center mb-3">
+      <img class="rounded img-fluid" src="data:image/;base64, ${result.data.face}" alt="User Image" style="max-width: 100%; height: auto;">
+    </div>
+    <div class="col-md-8">
+      <div class="table-responsive">
+        <table class="table table-sm">
+          <tbody>
             <tr>
-               <th scope="row" style="text-align:right;">Address</th>
-               <td  style="text-align:left">${result.data.address}
-               </td>
+              <th style="width: 40%;">Tracking Number</th>
+              <td>${result.data.trackingid}</td>
             </tr>
-         </tbody>
-      </table>
-   </div>
+            <tr>
+              <th>NIN</th>
+              <td><span id="nin_no">${result.data.nin}</span></td>
+            </tr>
+            <tr>
+              <th>First Name</th>
+              <td>${result.data.firstname}</td>
+            </tr>
+            <tr>
+              <th>Surname</th>
+              <td>${result.data.lastname}</td>
+            </tr>
+            <tr>
+              <th>Middle Name</th>
+              <td>${result.data.middlename}</td>
+            </tr>
+            <tr>
+              <th>Gender</th>
+              <td>${result.data.gender === 'm' ? 'Male' : result.data.gender === 'f' ? 'Female' : 'Not Specified'}</td>
+            </tr>
+             <tr>
+              <th>ZONE</th>
+              <td>${result.data.state}</td>
+            </tr>
+            <tr>
+              <th>Town</th>
+              <td>${result.data.town ?? ''}</td>
+            </tr>
+            <tr>
+              <th>Address</th>
+              <td>${result.data.address}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-            `;
-                $("#download").show();
+`;
+
+
+$("#download").removeClass("d-none"); // show
                 $("#downloadDiv").show();
 
             } else {

@@ -58,7 +58,7 @@
                                                                 maxlength="11" class="form-control" required />
                                                         </div>
                                                         <div class="col-md-12  mt-2 mb-0">
-                                                            <p class="form-label">Description</p>
+                                                            <p class="form-label">Reason</p>
                                                             <textarea  id="description" name="description" class="form-control" required></textarea>
                                                         </div>
                                                     </div>

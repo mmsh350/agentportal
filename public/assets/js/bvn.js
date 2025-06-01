@@ -30,67 +30,57 @@ $("#verifyBVN").on("click", function (event) {
         beforeSend: function () {
 
             showLoader();
-            $("#download").hide();
+            $("#download").addClass("d-none");
 
         },
         success: function (result) {
             $("#loader").hide();
 
-            validationInfo.innerHTML = `
-            <div class="border border-light">
-   <div class="table-responsive">
-      <table class="table">
-         <thead >
-            <tr>
-               <th style="border: none ! important;" width="20%"></th>
-               <th style="border: none ! important;"></th>
-               <th style="border: none ! important;"></th>
-               <th style="border: none ! important;"></th>
-            </tr>
-         </thead>
-         <tbody>
-            <tr>
-               <th scope="row" rowspan="9">
-                  <img class="rounded" src="data:image/;base64, ${result.data.image}" alt="User Image" style="width: 250px; height: 250px;">
-               </th>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">BVN</th>
-               <td style="text-align:left" ><span id="bvnno" >${result.data.idNumber}</span>
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">FirstName</th>
-               <td  style="text-align:left">${result.data.firstName}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Surname</th>
-               <td  style="text-align:left">${result.data.lastName}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Middle Name</th>
-               <td  style="text-align:left">${result.data.middleName}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Phone No</th>
-               <td  style="text-align:left">${result.data.mobile}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Gender</th>
-               <td  style="text-align:left">${result.data.gender}
-               </td>
-            </tr>
-
-         </tbody>
-      </table>
-   </div>
+validationInfo.innerHTML = `
+<div class="border border-light p-3">
+    <div class="row align-items-start">
+        <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
+            <img class="rounded img-fluid" src="data:image/;base64, ${result.data.image}" alt="User Image" style="max-width: 100%; height: auto;">
+        </div>
+        <div class="col-12 col-md-8">
+            <div class="table-responsive">
+                <table class="table  table-sm ">
+                    <tbody>
+                        <tr>
+                            <th style="text-align: right;">BVN</th>
+                            <td style="text-align: left;">
+                                <span id="bvnno">${result.data.idNumber}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">First Name</th>
+                            <td style="text-align: left;">${result.data.firstName}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">Surname</th>
+                            <td style="text-align: left;">${result.data.lastName}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">Middle Name</th>
+                            <td style="text-align: left;">${result.data.middleName}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">Phone No</th>
+                            <td style="text-align: left;">${result.data.mobile}</td>
+                        </tr>
+                        <tr>
+                            <th style="text-align: right;">Gender</th>
+                            <td style="text-align: left;">${result.data.gender}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
-            `;
-            $("#download").show();
+`;
+
+            $("#download").removeClass("d-none"); // show
         },
         error: function (data) {
             $("#loader").hide();

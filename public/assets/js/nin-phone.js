@@ -31,68 +31,81 @@ $("#verifyNIN").on("click", function (event) {
         beforeSend: function () {
 
             showLoader();
-            $("#download").hide();
+            $("#download").addClass("d-none");
 
         },
         success: function (result) {
             $("#loader").hide();
 
             if (result && result.data) {
-                validationInfo.innerHTML = `
-            <div class="border border-light">
 
-   <div class="table-responsive">
-      <table class="table">
-         <thead >
-            <tr>
-               <th style="border: none ! important;" width="20%"></th>
-               <th style="border: none ! important;"></th>
-               <th style="border: none ! important;"></th>
-               <th style="border: none ! important;"></th>
+validationInfo.innerHTML = `
+<div class="border border-light p-3">
+   <div class="row">
+      <div class="col-md-4 text-center mb-3">
+         <img class="rounded img-fluid" src="data:image/;base64, ${result.data.image}" alt="User Image" style="max-width: 100%; height: auto;">
+      </div>
+      <div class="col-md-8">
+         <div class="table-responsive">
+            <table class="table table-sm">
+               <tbody>
+                  <tr>
+                     <th style="width: 40%;">NIN</th>
+                     <td><span id="nin_no">${result.data.nin}</span></td>
+                  </tr>
+                    <tr>
+                        <th>Tracking ID</th>
+                        <td>${result.data.trackingId}</td>
+                    </tr>
+                  <tr>
+                     <th>First Name</th>
+                     <td >${result.data.firstname}</td>
+                  </tr>
+                  <tr>
+                     <th>Surname</th>
+                     <td >${result.data.surname}</td>
+                  </tr>
+                  <tr>
+                     <th>Middle Name</th>
+                     <td >${result.data.middlename}</td>
+                  </tr>
+                  <tr>
+                     <th>Phone No</th>
+                     <td >${result.data.telephoneno}</td>
+                  </tr>
+                  <tr>
+                     <th>Gender</th>
+                     <td >${result.data.gender}</td>
+                  </tr>
+                   <tr>
+              <th>Residence State</th>
+              <td>${result.data.residence_state}</td>
             </tr>
-         </thead>
-         <tbody>
             <tr>
-               <th scope="row" rowspan="9">
-                  <img class="rounded" src="data:image/;base64, ${result.data.image}" alt="User Image" style="width: 250px; height: 250px;">
-               </th>
+              <th>Residence LGA/Town</th>
+              <td>${result.data.residence_lga ?? ''} / ${result.data.residence_town ?? ''}</td>
             </tr>
             <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">NIN</th>
-               <td style="text-align:left" ><span id="nin_no" >${result.data.nin}</span>
-               </td>
+              <th>Birth State</th>
+              <td>${result.data.self_origin_state}</td>
             </tr>
             <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">FirstName</th>
-               <td  style="text-align:left">${result.data.firstname}
-               </td>
+              <th>Birth LGA</th>
+              <td>${result.data.self_origin_lga	}</td>
             </tr>
             <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Surname</th>
-               <td  style="text-align:left">${result.data.surname}
-               </td>
+              <th>Address</th>
+              <td>${result.data.residence_AdressLine1}</td>
             </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Middle Name</th>
-               <td  style="text-align:left">${result.data.middlename}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Phone No</th>
-               <td  style="text-align:left">${result.data.telephoneno}
-               </td>
-            </tr>
-            <tr>
-               <th scope="row" style="text-align:right; border: none ! important;">Gender</th>
-               <td  style="text-align:left">${result.data.gender}
-               </td>
-            </tr>
-         </tbody>
-      </table>
+               </tbody>
+            </table>
+         </div>
+      </div>
    </div>
 </div>
-            `;
-                $("#download").show();
+`;
+
+            $("#download").removeClass("d-none"); // show
             } else {
                 hideLoader();
 

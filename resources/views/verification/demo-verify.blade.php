@@ -138,25 +138,35 @@
                                         <p class="mt-5">This section will display search results </p>
                                     </center>
                                 </div>
+
                                 <div class="col-md-12">
-                                    <div class="btn-list text-center" style="display:none;" id="download">
-                                        <div class="mb-2 mr-2">
-                                            <a href="#" id="standardSlip" type="button"
-                                                class="btn btn-primary btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})</a>
-                                        </div>
-                                        <div class="mb-2">
-                                            <a href="#" id="premiumSlip" type="button"
-                                                class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})</a>
-                                        </div>
-                                        <div class="mb-2">
-                                            <a href="#" id="regularSlip" type="button"
-                                                class="btn btn-info btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})</a>
-                                        </div>
-                                    </div>
-                                </div>
+                                    <div class="text-center d-none" id="download">
+                                       <div class="row justify-content-center">
+                                          <div class="col-12 col-sm-6 col-md-4 mb-2">
+                                             <a href="#" id="standardSlip" type="button"
+                                                class="btn btn-primary btn-wave w-100">
+                                                <i class="bi bi-download"></i>&nbsp;
+                                                Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})
+                                             </a>
+                                          </div>
+                                          <div class="col-12 col-sm-6 col-md-4 mb-2">
+                                             <a href="#" id="premiumSlip" type="button"
+                                                class="btn btn-secondary btn-wave w-100">
+                                                <i class="bi bi-download"></i>&nbsp;
+                                                Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})
+                                             </a>
+                                          </div>
+                                          <div class="col-12 col-sm-6 col-md-4 mb-2">
+                                             <a href="#" id="regularSlip" type="button"
+                                                class="btn btn-info btn-wave w-100">
+                                                <i class="bi bi-download"></i>&nbsp;
+                                                Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})
+                                             </a>
+                                          </div>
+                                       </div>
+                                     </div>
+                                 </div>
+
                             </div>
                         </div>
                     </div>

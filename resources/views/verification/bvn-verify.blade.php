@@ -115,30 +115,35 @@
                                         <p class="mt-5">This section will display search results </p>
                                     </center>
                                 </div>
+
                                 <div class="col-md-12">
-                                    <div class="btn-list text-center" style="display:none;" id="download">
-                                       <div class="row">
-                                            <div class="mb-2 mr-2">
+                                    <div class="btn-list text-center d-none" id="download">
+                                        <div class="row justify-content-center">
+                                            <div class="col-12 col-md-auto mb-2">
                                                 <a href="#" id="freeSlip" type="button"
-                                                    class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>
-                                                    Standard Slip
-                                                    (&#x20A6;{{ $bvn_standard_fee->amount }})</a>
+                                                    class="btn btn-secondary btn-wave w-100">
+                                                    <i class="bi bi-download"></i> Standard Slip
+                                                    (&#x20A6;{{ $bvn_standard_fee->amount }})
+                                                </a>
                                             </div>
-                                            <div class="mb-2 mr-2">
+                                            <div class="col-12 col-md-auto mb-2">
                                                 <a href="#" id="paidSlip" type="button"
-                                                    class="btn btn-primary btn-wave"><i class="bi bi-download"></i> Premium
-                                                    Slip
-                                                    (&#x20A6;{{ $bvn_premium_fee->amount }})</a>
+                                                    class="btn btn-primary btn-wave w-100">
+                                                    <i class="bi bi-download"></i> Premium Slip
+                                                    (&#x20A6;{{ $bvn_premium_fee->amount }})
+                                                </a>
                                             </div>
-                                            <div class="mb-2 mr-2">
+                                            <div class="col-12 col-md-auto mb-2">
                                                 <a href="#" id="plasticSlip" type="button"
-                                                    class="btn btn-warning btn-wave"><i class="bi bi-download"></i> Plastic
-                                                    ID Card
-                                                    (&#x20A6;{{ $bvn_plastic_fee->amount }})</a>
+                                                    class="btn btn-warning btn-wave w-100">
+                                                    <i class="bi bi-download"></i> Plastic ID Card
+                                                    (&#x20A6;{{ $bvn_plastic_fee->amount }})
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
