@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <div class="alert alert-danger shadow-sm">
+                            {{-- <div class="alert alert-danger shadow-sm">
                                 <center><svg class="d-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                         width="36" height="36" fill="currentColor">
                                         <path
@@ -62,7 +62,7 @@
                                     <p> Please confirm you have sufficient funds in your wallet before
                                         proceeding with the verification.
                                 </center>
-                            </div>
+                            </div> --}}
 
                             <div class="alert alert-danger alert-dismissible text-center" id="errorMsg"
                                 style="display:none;" role="alert">

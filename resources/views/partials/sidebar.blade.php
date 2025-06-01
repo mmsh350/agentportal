@@ -24,14 +24,14 @@
 
         <!-- Dashboard Section -->
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.dashboard') }}">
+            <a class="nav-link {{ Route::is('user.dashboard') ? 'active' : '' }}" href="{{ route('user.dashboard') }}">
                 <i class="mdi mdi-view-dashboard menu-icon"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.wallet') }}">
+            <a class="nav-link {{ Route::is('user.wallet') ? 'active' : '' }}" href="{{ route('user.wallet') }}">
                 <i class="mdi mdi-wallet menu-icon"></i>
                 <span class="menu-title">Fund Wallet</span>
             </a>
@@ -39,47 +39,53 @@
 
         <!-- Verification Section -->
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.verify-nin') }}">
+            <a class="nav-link {{ Route::is('user.verify-nin') ? 'active' : '' }}" href="{{ route('user.verify-nin') }}">
                 <i class="mdi mdi-fingerprint menu-icon"></i>
                 <span class="menu-title">Verify NIN</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.verify-nin-phone') }}">
-                <i class="mdi mdi-phone menu-icon"></i>
-                <span class="menu-title">Verify NIN PHONE</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.ipe') }}">
-                <i class="mdi mdi-magnify menu-icon"></i>
-                <span class="menu-title">IPE</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.verify-bvn') }}">
+            <a class="nav-link {{ Route::is('user.verify-bvn') ? 'active' : '' }}" href="{{ route('user.verify-bvn') }}">
                 <i class="mdi mdi-fingerprint menu-icon"></i>
                 <span class="menu-title">Verify BVN</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.personalize-nin') }}">
-                <i class="mdi mdi-magnify menu-icon"></i>
-                <span class="menu-title">Personalize</span>
+            <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}" href="{{ route('user.verify-nin-phone') }}">
+                <i class="mdi mdi-phone menu-icon"></i>
+                <span class="menu-title">Verify NIN PHONE</span>
             </a>
         </li>
 
-        {{-- <li class="nav-item">
-            <a class="nav-link" href="{{ route('user.bvn-enrollment') }}">
-                <i class="mdi mdi-account-plus menu-icon"></i>
-
-                <span class="menu-title">BVN User</span>
+        <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}" href="{{ route('user.verify-nin-phone') }}">
+                <i class="mdi mdi-account-group menu-icon"></i>
+                <span class="menu-title">NIN Demographic</span>
             </a>
-        </li> --}}
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="{{ route('user.ipe') }}">
+                <i class="mdi mdi-magnify menu-icon"></i>
+                <span class="menu-title">Instant IPE</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="{{ route('user.ipe') }}">
+                <i class="mdi mdi-sync menu-icon"></i>
+                <span class="menu-title">Instant Validation</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.personalize-nin') ? 'active' : '' }}" href="{{ route('user.personalize-nin') }}">
+                <i class="mdi mdi-magnify menu-icon"></i>
+                <span class="menu-title">Personalization</span>
+            </a>
+        </li>
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('user.support') }}">
@@ -97,7 +103,7 @@
                 </a>
                 <ul class="sub-menu nav flex-column ps-4" id="adminSubmenu">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.services.index') }}">
+                        <a class="nav-link {{ Route::is('admin.services.index') ? 'active' : '' }}" href="{{ route('admin.services.index') }}">
                             <i class="mdi mdi-pencil menu-icon"></i> Services
                         </a>
                     </li>

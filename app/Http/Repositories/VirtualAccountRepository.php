@@ -10,6 +10,19 @@ use Illuminate\Support\Facades\Log;
 class VirtualAccountRepository
 {
 
+    protected string $secret;
+    protected string $contractCode;
+    protected string $apiKey;
+    protected string $baseUrl;
+
+    public function __construct()
+    {
+        $this->secret = config('monnify.credentials.monnifysecret');
+        $this->contractCode = config('monnify.credentials.monnifycontract');
+        $this->apiKey = config('monnify.credentials.monnifyapi');
+        $this->baseUrl = config('monnify.credentials.monnify_base_url');
+    }
+
     public function createVirtualAccount($loginUserId)
     {
         $accessToken =  $this->getAccessToken();
@@ -21,11 +34,12 @@ class VirtualAccountRepository
 
             $userDetails = User::where('id', $loginUserId)->first();
 
-            $customer_name = trim($userDetails->name);
             $refno = md5(uniqid($userDetails->email));
 
             $bankCode1 = env('BANKCODE1');
             $bankCode2 = env('BANKCODE2');
+            $bankCode3 = env('BANKCODE3');
+
 
             try {
 
@@ -33,12 +47,12 @@ class VirtualAccountRepository
                     "accountReference"     => $refno,
                     "accountName"          => $userDetails->name,
                     "currencyCode"         => "NGN",
-                    "contractCode"         => env('MONNIFYCONTRACT'),
+                    "contractCode"         => $this->contractCode,
                     "customerEmail"        => $userDetails->email,
                     "customerName"         => $userDetails->name,
                     "bvn"                  => '22192051259',
                     "getAllAvailableBanks" => false,
-                    "preferredBanks"       => [$bankCode1, $bankCode2],
+                    "preferredBanks"       => [$bankCode1, $bankCode2,$bankCode3],
                 ];
 
                 Log::info($data);
@@ -75,44 +89,6 @@ class VirtualAccountRepository
                 // Decode the JSON response to an associative array
                 $retrieveData = json_decode($response, true);
 
-                // $retrieveData = [
-                //     "requestSuccessful" => true,
-                //     "responseMessage" => "success",
-                //     "responseCode" => "0",
-                //     "responseBody" => [
-                //         "contractCode" => "324191543790",
-                //         "accountReference" => "e519a3b0568ed95135abfbc883152393",
-                //         "accountName" => "HAS",
-                //         "currencyCode" => "NGN",
-                //         "customerEmail" => "sani.m38@gmail.com",
-                //         "customerName" => "Test User",
-                //         "accounts" => [
-                //             [
-                //                 "bankCode" => "232",
-                //                 "bankName" => "Sterling bank",
-                //                 "accountNumber" => "5271360263",
-                //                 "accountName" => "HAS"
-                //             ],
-                //             [
-                //                 "bankCode" => "50515",
-                //                 "bankName" => "Moniepoint Microfinance Bank",
-                //                 "accountNumber" => "6059140435",
-                //                 "accountName" => "HAS"
-                //             ]
-                //         ],
-                //         "collectionChannel" => "RESERVED_ACCOUNT",
-                //         "reservationReference" => "17JVS876SSDTN6U07060",
-                //         "reservedAccountType" => "GENERAL",
-                //         "status" => "ACTIVE",
-                //         "createdOn" => "2025-05-30 10:39:27.997",
-                //         "incomeSplitConfig" => [],
-                //         "bvn" => "22192051259",
-                //         "restrictPaymentSource" => false,
-                //         "metaData" => new \stdClass()
-                //     ]
-                // ];
-
-
                 // Proceed only if the request was successful
                 if (! $retrieveData['requestSuccessful']) {
                     throw new Exception('Request was not successful.');
@@ -127,7 +103,7 @@ class VirtualAccountRepository
 
                 // Iterate through accounts and prepare data for insertion
                 foreach ($accounts as $account) {
-                    if (in_array($account['bankCode'], [$bankCode1, $bankCode2])) {
+                    if (in_array($account['bankCode'], [$bankCode1, $bankCode2,$bankCode3])) {
                         $insertData[] = [
                             'user_id' => $loginUserId,
                             'accountReference' => $accountReference,
@@ -162,10 +138,10 @@ class VirtualAccountRepository
 
         try {
 
-            $AccessKey = env('MONNIFYAPI') . ':' . env('MONNIFYSECRET');
+            $AccessKey = $this->apiKey . ':' .  $this->secret;
             $ApiKey = base64_encode($AccessKey);
 
-            $url =  env('MONNIFY_BASE_URL') . '/v1/auth/login/';
+            $url =  $this->baseUrl . '/v1/auth/login/';
 
             $headers = [
                 'Accept: application/json, text/plain, */*',

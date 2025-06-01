@@ -101,12 +101,14 @@
                                                                 <th scope="row">{{ $serialNumber++ }}</th>
                                                                 <td>{{ $data->trackingId }}</td>
                                                                 <td>
-                                                                    {{ $data->reply }}
+                                                                    {{ $data->reply ?? 'No reply yet' }}
                                                                     <div>
-                                                                        <a href="{{ route('user.personalize-nin-auto', $data->trackingId) }}"
+                                                                        @if($data->reply && ($data->reply!= 'Refunded'))
+                                                                        <a href="{{ route('user.personalize-nin-auto', $data->reply) }}"
                                                                             class="text-primary text-decoration-none small">
                                                                             <i class="bi bi-pencil-square"></i> Personalize
                                                                         </a>
+                                                                        @endif
                                                                     </div>
                                                                 </td>
 

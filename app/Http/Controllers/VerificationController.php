@@ -13,7 +13,6 @@ use App\Models\Wallet;
 use App\Services\TransactionService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class VerificationController extends Controller
@@ -140,7 +139,6 @@ class VerificationController extends Controller
         }
     }
 
-
     public function ninRetrieve(Request $request)
     {
 
@@ -222,6 +220,9 @@ class VerificationController extends Controller
 
                 $response = json_decode($response, true);
 
+                //Log response
+                Log::info('NIN Vericiation', $response);
+
                 if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] !== self::RESP_MESSAGE) {
 
                     $data = $response['message'];
@@ -244,7 +245,14 @@ class VerificationController extends Controller
                         'status' => 'Not Found',
                         'errors' => ['Succesfully Verified with ( NIN do not exist)'],
                     ], 422);
-                } else {
+                }else if(isset($response['status']) && $response['status'] === 'caption'){
+
+                    return response()->json([
+                        'status' => 'Verification Failed',
+                        'errors' => ['Caption: '.$response['message']],
+                    ], 422);
+
+                }else {
                     return response()->json([
                         'status' => 'Verification Failed',
                         'errors' => ['Verification Failed: No need to worry, your wallet remains secure and intact. Please try again or contact support for assistance.'],
@@ -341,6 +349,9 @@ class VerificationController extends Controller
 
                 $response = json_decode($response, true);
 
+                  //Log response
+                  Log::info('NIN Phone Vericiation:', $response);
+
                 if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] !== self::RESP_MESSAGE) {
 
                     $data = $response['message'];
@@ -362,7 +373,14 @@ class VerificationController extends Controller
                         'status' => 'Not Found',
                         'errors' => ['Succesfully Verified with ( NIN do not exist)'],
                     ], 422);
-                } else {
+                }else if(isset($response['status']) && $response['status'] === 'caption'){
+
+                        return response()->json([
+                            'status' => 'Verification Failed',
+                            'errors' => ['Caption: '.$response['message']],
+                        ], 422);
+
+                 }else {
                     return response()->json([
                         'status' => 'Verification Failed',
                         'errors' => ['Verification Failed: No need to worry, your wallet remains secure and intact. Please try again or contact support for assistance.'],
@@ -448,6 +466,9 @@ class VerificationController extends Controller
 
                 $response = json_decode($response, true);
 
+                //Log response
+                Log::info('IPE Request', $response);
+
                 if (isset($response['status']) && $response['status'] === true) {
 
                     $this->processResponseDataIpe($loginUserId, $request->input('trackingId'));
@@ -463,9 +484,12 @@ class VerificationController extends Controller
 
                     return redirect()->route('user.ipe')
                         ->with('success', $response['message']);
-                } else {
+                } elseif(isset($response['status']) && $response['status'] === false){
                     return redirect()->route('user.ipe')
-                        ->with('error', 'IPE request is not successful');
+                    ->with('error', $response['message']);
+                }else {
+                    return redirect()->route('user.ipe')
+                        ->with('error', $response['message']);
                 }
             } catch (\Exception $e) {
                 return redirect()->route('user.ipe')
@@ -515,63 +539,61 @@ class VerificationController extends Controller
 
             $response = json_decode($response, true);
 
+             //Log response
+            Log::info('IPE Status:', $response);
+
 
             if (isset($response['status']) && $response['status'] === true) {
 
 
                 IpeRequest::where('trackingId', $trackingId)
+                    ->where('user_id', auth()->user()->id)
                     ->update(['reply' => $response['reply'] ?? '']);
 
                 return redirect()->route('user.ipe')
                     ->with('success', 'IPE request is successful, check the reply section');
 
-                // if ($data['resp_code'] === '200') {
-                // } elseif ($data['resp_code'] === '400') {
-
-                //     //process refund & NIN Services Fee
-                //     $ServiceFee = 0;
-
-                //     $ServiceFee = Service::where('service_code', '112')
-                //         ->where('status', 'enabled')
-                //         ->first();
-
-                //     if (!$ServiceFee)
-                //         return redirect()->route('user.ipe')
-                //             ->with('error', 'Sorry Action not Allowed !');
-
-                //     $ServiceFee = $ServiceFee->amount;
-
-                //     $wallet = Wallet::where('user_id',   $this->loginId)->first();
-
-                //     $balance = $wallet->balance + $ServiceFee;
-
-                //     // Check if already refunded
-                //     $refunded = IpeRequest::where('trackingId', $trackingId)
-                //         ->whereNull('refunded_at')
-                //         ->first();
-
-                //     if ($refunded) {
-                //         Wallet::where('user_id', $this->loginId)
-                //             ->update(['balance' => $balance]);
-
-                //         IpeRequest::where('trackingId', $trackingId)
-                //             ->update(['refunded_at' => Carbon::now(), 'reply' => 'Refunded']);
-
-                //         $this->transactionService->createTransaction($this->loginId, $ServiceFee, 'IPE Refund', "IPE Refund for Tracking ID: {$trackingId}",  'Wallet', 'Approved');
-                //     }
-
-                //     return redirect()->route('user.ipe')
-                //         ->with('error',  $response['message']);
-                // } else {
-                //     return redirect()->route('user.ipe')
-                //         ->with('error',  $response['message']);
-                // }
             } elseif (isset($response['status']) && $response['status'] === false) {
+
+
+                    //process refund & NIN Services Fee
+                    $ServiceFee = 0;
+
+                    $ServiceFee = Service::where('service_code', '112')
+                        ->where('status', 'enabled')
+                        ->first();
+
+                    if (!$ServiceFee)
+                        return redirect()->route('user.ipe')
+                            ->with('error', 'Sorry Action not Allowed !');
+
+                    $ServiceFee = $ServiceFee->amount;
+
+                    $wallet = Wallet::where('user_id',   $this->loginId)->first();
+
+                    $balance = $wallet->balance + $ServiceFee;
+
+                    // Check if already refunded
+                    $refunded = IpeRequest::where('trackingId', $trackingId)
+                        ->where('user_id',auth()->user()->id)
+                        ->whereNull('refunded_at')
+                        ->first();
+
+                    if ($refunded) {
+                        Wallet::where('user_id', $this->loginId)
+                            ->update(['balance' => $balance]);
+
+                        IpeRequest::where('trackingId', $trackingId)
+                            ->update(['refunded_at' => Carbon::now(), 'reply' => 'Refunded']);
+
+                        $this->transactionService->createTransaction($this->loginId, $ServiceFee, 'IPE Refund', "IPE Refund for Tracking ID: {$trackingId}",  'Wallet', 'Approved');
+
                 return redirect()->route('user.ipe')
-                    ->with('error',  $response['message']);
+                    ->with('error',  'IPE Request '.$response['message'].' A Refund has been processed.');
+                }
             } else {
                 return redirect()->route('user.ipe')
-                    ->with('error', 'Unexpected error occurred');
+                    ->with('error', $response['message'] );
             }
         } catch (\Exception $e) {
 
@@ -653,6 +675,8 @@ class VerificationController extends Controller
 
                 $response = json_decode($response, true);
 
+                //Log response
+                Log::info('BVN Vericiation', $response);
 
                 if (isset($response['status'], $response['message']['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message']['status'] === 'found') {
 
@@ -766,6 +790,9 @@ class VerificationController extends Controller
                 curl_close($ch);
 
                 $response = json_decode($response, true);
+
+                //Log response
+                Log::info('NIN Personalization', $response);
 
                 if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] !== self::RESP_MESSAGE) {
 

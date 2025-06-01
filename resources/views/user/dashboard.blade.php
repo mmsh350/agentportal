@@ -182,18 +182,13 @@
                     <div class="container py-3" style="max-width: 100%">
                         <h4 class="fw-light mb-4 text-center">Our Services</h4>
                         <div class="row g-4">
-                            <!-- Service 1 -->
-                            
-  <!-- Service 1 -->
+
                             <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 40px; max-height: 40px;">
-                                            </div>
+                                            <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 100px; max-height: 100px;">
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify NIN</h5>
                                         <a href="{{ route('user.verify-nin') }}" class="stretched-link"></a>
@@ -207,13 +202,28 @@
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
+
                                                 <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 40px; max-height: 40px;">
-                                            </div>
+                                                    style="max-width: 100px; max-height: 100px;">
+
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify NIN Phone</h5>
+                                        <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
+                                    </div>
+                                </div>
+                            </div>
+
+                              <!-- Service 1 -->
+                              <div class="col-6 col-md-6 col-lg-4">
+                                <div class="card shadow-sm border-0 h-100">
+                                    <div class="card-body text-center p-3">
+                                        <div class="icon-box mb-3">
+
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 100px; max-height: 100px;">
+
+                                        </div>
+                                        <h5 class="icon-box-title mb-0 fw-bold">Verify NIN Demographic</h5>
                                         <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
                                     </div>
                                 </div>
@@ -224,13 +234,12 @@
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
+
                                                 <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 40px; max-height: 40px;">
-                                            </div>
+                                                    style="max-width: 100px; max-height: 100px;">
+
                                         </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">IPE</h5>
+                                        <h5 class="icon-box-title mb-0 fw-bold">Instant IPE</h5>
                                         <a href="{{ route('user.ipe') }}" class="stretched-link"></a>
                                     </div>
                                 </div>
@@ -242,11 +251,10 @@
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
+
                                                 <img src="{{ asset('assets/images/bvn.png') }}" alt="Logo"
-                                                    style="max-width: 40px; max-height: 40px;">
-                                            </div>
+                                                    style="max-width: 100px; max-height: 100px;">
+
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify BVN</h5>
                                         <a href="{{ route('user.verify-bvn') }}" class="stretched-link"></a>
@@ -260,11 +268,10 @@
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
+
                                                 <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 40px; max-height: 40px;">
-                                            </div>
+                                                    style="max-width: 100px; max-height: 100px;">
+
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Personalize</h5>
                                         <a href="{{ route('user.personalize-nin') }}" class="stretched-link"></a>
@@ -272,20 +279,22 @@
                                 </div>
                             </div>
 
-                            {{-- <div class="col-6 col-md-6 col-lg-4">
+
+                            <div class="col-6 col-md-6 col-lg-4">
                                 <div class="card shadow-sm border-0 h-100">
                                     <div class="card-body text-center p-3">
                                         <div class="icon-box mb-3">
-                                            <div class="icon-box-media mx-auto d-flex align-items-center justify-content-center bg-primary rounded-circle"
-                                                style="width: 70px; height: 70px;">
-                                                <i class="bi bi-person-plus text-white" style="font-size: 35px;"></i>
-                                            </div>
+
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
+                                                    style="max-width: 100px; max-height: 100px;">
+
                                         </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">BVN User</h5>
-                                        <a href="{{ route('user.bvn-enrollment') }}" class="stretched-link"></a>
+                                        <h5 class="icon-box-title mb-0 fw-bold">Instant Validation</h5>
+                                        <a href="{{ route('user.personalize-nin') }}" class="stretched-link"></a>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
+
 
                         </div>
                     </div>

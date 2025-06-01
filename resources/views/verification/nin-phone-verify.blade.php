@@ -2,33 +2,34 @@
 
 @section('title', 'Verify NIN Phone')
 @push('styles')
-    <style>
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 18px;
-            z-index: 9999;
-        }
+<style>
+    #overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 18px;
+        z-index: 9999;
+        flex-direction: column;
+    }
 
-        #overlay button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #ff5252;
-            border: none;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-    </style>
+    #overlay button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background: #ff5252;
+        border: none;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
 @endpush
 @section('content')
     <div class="row">
@@ -46,7 +47,7 @@
                             </div>
                         </div>
                         <div class="card-body ">
-                            <div class="alert alert-danger shadow-sm">
+                            {{-- <div class="alert alert-danger shadow-sm">
                                 <center><svg class="d-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                                         width="36" height="36" fill="currentColor">
                                         <path
@@ -60,7 +61,7 @@
                                     <p> Please confirm you have sufficient funds in your wallet before proceeding
                                         with the verification.
                                 </center>
-                            </div>
+                            </div> --}}
 
                             <div class="alert alert-danger alert-dismissible text-center" id="errorMsg"
                                 style="display:none;" role="alert">
@@ -136,42 +137,70 @@
             </div>
         </div>
     </div>
-    <div id="overlay">
+    <div id="overlay" style="display: none;">
         <div class="text-center">
-            <p>To use this page, pop-ups must be enabled. Please allow pop-ups for this site.</p>
+            <p>Pop-ups are blocked. Please enable them to continue.</p>
             <button onclick="enablePopups()">Allow Pop-ups</button>
         </div>
     </div>
-    <div id="responsive-overlay"></div>
+
 @endsection
 @push('scripts')
     <script src="{{ asset('assets/js/nin-phone.js') }}"></script>
     <script>
-        function enablePopups() {
-            const testPopup = window.open('', '_blank', 'width=1,height=1');
-            if (testPopup === null || typeof testPopup === 'undefined') {
-                alert("Pop-ups are still blocked. Please allow pop-ups in your browser settings.");
-            } else {
+        function checkPopupStatus() {
 
-                testPopup.close();
-                localStorage.setItem('popupsAllowed', 'true');
-                document.getElementById('overlay').style.display = 'none';
-                window.location.reload();
-            }
-        }
-        window.onload = function() {
             if (localStorage.getItem('popupsAllowed') === 'true') {
                 document.getElementById('overlay').style.display = 'none';
-                return;
+                return true;
             }
-            const testPopup = window.open('', '_blank', 'width=1,height=1');
-            if (testPopup === null || typeof testPopup === 'undefined') {
+
+            return false;
+        }
+
+        function testPopups() {
+            try {
+                const testPopup = window.open('', '_blank', 'width=1,height=1,left=-9999,top=-9999');
+                if (testPopup && !testPopup.closed) {
+                    testPopup.close();
+                    localStorage.setItem('popupsAllowed', 'true');
+                    return true;
+                }
+            } catch (e) {
+                console.error("Popup test failed:", e);
+            }
+            return false;
+        }
+
+
+        function showOverlayIfBlocked() {
+            if (checkPopupStatus()) return;
+
+            if (!testPopups()) {
                 document.getElementById('overlay').style.display = 'flex';
             } else {
-                testPopup.close();
-                localStorage.setItem('popupsAllowed', 'true');
                 document.getElementById('overlay').style.display = 'none';
             }
-        };
+        }
+
+
+        function enablePopups() {
+            if (testPopups()) {
+                document.getElementById('overlay').style.display = 'none';
+            } else {
+                alert(
+                    "Pop-ups are still blocked. Please:\n1. Click the popup blocker icon in your address bar\n2. Select 'Always allow pop-ups from this site'\n3. Refresh the page"
+                );
+            }
+        }
+
+
+        window.addEventListener('DOMContentLoaded', function() {
+
+            if (!checkPopupStatus()) {
+
+                setTimeout(showOverlayIfBlocked, 500);
+            }
+        });
     </script>
 @endpush
