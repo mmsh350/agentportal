@@ -6,6 +6,7 @@ use App\Http\Repositories\NIN_PDF_Repository;
 use App\Http\Repositories\BVN_PDF_Repository;
 use App\Http\Repositories\VirtualAccountRepository;
 use App\Http\Repositories\WalletRepository;
+use App\Models\BvnPhoneSearch;
 use App\Models\IpeRequest;
 use App\Models\NinValidation;
 use App\Models\Service;
@@ -63,6 +64,22 @@ class VerificationController extends Controller
 
 
         return view('verification.nin-validation', compact('ServiceFee',  'validations'));
+    }
+
+    public function bvnPhoneSearch()
+    {
+        $serviceCodes = ['115'];
+        $services = Service::whereIn('service_code', $serviceCodes)
+            ->get()
+            ->keyBy('service_code');
+
+        $ServiceFee = $services->get('115') ?? 0.00;
+
+        $bvns = BvnPhoneSearch::where('user_id',  $this->loginId)
+            ->orderBy('id', 'desc')
+            ->paginate(5);
+
+        return view('verification.phone-search', compact('ServiceFee',  'bvns'));
     }
     public function ninPersonalize($auto = false)
     {
@@ -612,6 +629,65 @@ class VerificationController extends Controller
 
         }
     }
+
+    public function bvnPhoneRequest(Request $request)
+    {
+        $request->validate([
+            'phone_number' => 'required|digits:11',
+            'name' => 'required|string',
+        ]);
+
+        //NIN Services Fee
+        $ServiceFee = 0;
+
+        $ServiceFee = Service::where('service_code', '115')
+            ->where('status', 'enabled')
+            ->first();
+
+        if (!$ServiceFee)
+            return redirect()->route('user.bvn-phone-search')
+                ->with('error', 'Sorry Action not Allowed !');
+
+        $ServiceFee = $ServiceFee->amount;
+
+        $loginUserId = auth()->user()->id;
+
+        //Check if wallet is funded
+        $wallet = Wallet::where('user_id', $loginUserId)->first();
+        $wallet_balance = $wallet->balance;
+        $balance = 0;
+
+        if ($wallet_balance < $ServiceFee) {
+
+            return redirect()->route('user.bvn-phone-search')
+                ->with('error', 'Sorry Wallet Not Sufficient for Transaction !');
+        } else {
+
+            $balance = $wallet_balance - $ServiceFee;
+
+            Wallet::where('user_id', $loginUserId)
+            ->update(['balance' => $balance]);
+
+           $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
+
+           $trx_id = $this->transactionService->createTransaction($loginUserId, $ServiceFee, 'BVN Phone Search', $serviceDesc,  'Wallet', 'Approved');
+           $refno = $this->transactionService->generateReferenceNumber();
+
+           // Save NIN validation
+            BvnPhoneSearch::create([
+                'user_id' => $loginUserId,
+                'tnx_id' => $trx_id->id,
+                'refno' => $refno,
+                'phone_number'  => $request->phone_number,
+                'name' => $request->name,
+            ]);
+
+            return redirect()->route('user.bvn-phone-search')
+            ->with('success', 'BVN Search submitted successfully !');
+
+        }
+    }
+
     public function ipeRequest(Request $request)
     {
         $request->validate([

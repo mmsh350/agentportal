@@ -62,6 +62,11 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::get('/nin-validation', [VerificationController::class, 'showNinValidation'])->name('nin-validation');
             Route::post('nin-validation-request', [VerificationController::class, 'ninValidation'])->name('nin-validation-request');
 
+            //NIN Validation
+            Route::get('/bvn-phone-search', [VerificationController::class, 'bvnPhoneSearch'])->name('bvn-phone-search');
+            Route::post('bvn-phone-search', [VerificationController::class, 'bvnPhoneRequest'])->name('bvn-phone-request');
+
+
             //Enrollment-----------------------------------------------------------------------------------------------------
             Route::post('/bvn-enrollment', [EnrollmentController::class, 'enrollBVN'])->name('enroll-bvn');
             //Wallet

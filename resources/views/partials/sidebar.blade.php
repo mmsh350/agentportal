@@ -53,6 +53,12 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.bvn-phone-search') ? 'active' : '' }}" href="{{ route('user.bvn-phone-search') }}">
+                <i class="mdi mdi-magnify menu-icon"></i>
+                <span class="menu-title">BVN Search</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="{{ route('user.ipe') }}">
                 <i class="mdi mdi-sync menu-icon"></i>
                 <span class="menu-title">Instant IPE</span>
