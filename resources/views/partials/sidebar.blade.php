@@ -100,7 +100,7 @@
             </a>
         </li>
         <!-- Admin Section -->
-        @if (auth()->user()->role == 'admin')
+        @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="toggleSubmenu(event, 'adminSubmenu')">
                     <i class="mdi mdi-cog-outline menu-icon"></i>

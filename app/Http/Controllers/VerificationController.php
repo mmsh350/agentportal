@@ -1216,6 +1216,7 @@ class VerificationController extends Controller
             ]
         );
     }
+
     public function processResponseDataForNINTracking($data)
     {
 
@@ -1240,6 +1241,7 @@ class VerificationController extends Controller
             Log::error('Verification creation failed: ' . $e->getMessage());
         }
     }
+
     public function processResponseDataForNINPhone($data)
     {
 
@@ -1271,6 +1273,7 @@ class VerificationController extends Controller
             ], 500);
         }
     }
+
     public function processResponseDataIpe($userId, $trackingNo)
     {
         try {
@@ -1289,6 +1292,7 @@ class VerificationController extends Controller
             ], 500);
         }
     }
+
     public function regularSlip($nin_no)
     {
 
@@ -1323,6 +1327,7 @@ class VerificationController extends Controller
             return  $response;
         }
     }
+
     public function standardSlip($nin_no)
     {
 
@@ -1488,6 +1493,7 @@ class VerificationController extends Controller
             }
         }
     }
+
     public function plasticBVN($bvnno)
     {
         //Services Fee
