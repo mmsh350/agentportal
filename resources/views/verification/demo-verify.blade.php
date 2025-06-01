@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Verify NIN Phone')
+@section('title', 'Verify Demographic')
 @push('styles')
 <style>
     #overlay {
@@ -43,7 +43,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title m-0">
-                                Verify NIN Phone
+                                Verify NIN Demographic
                             </div>
                         </div>
                         <div class="card-body ">
@@ -68,24 +68,51 @@
                                 <small id="message">Processing your request.</small>
                             </div>
                             <div class="row text-center">
-                                <div class="col-md-12">
-                                    <form id="verifyForm" name="verifyForm" method="POST">
-                                        @csrf
-                                        <div class="mb-3 row">
-                                            <div class="col-md-12 mx-auto">
+
+                                <form id="verifyForm" name="verifyForm" method="POST">
+                                    @csrf
+                                    <p class="mb-3 text-muted">Verify NIN Demographic</p>
+
+                                    <div class="row">
+                                        <!-- Left Column -->
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="firstName">First Name</label>
+                                                <input type="text" id="firstName" name="firstName" class="form-control" value="" required />
                                             </div>
-                                            <div class="col-md-12 ">
-                                                <p class="mb-2 text-muted">Verify NIN Phone</p>
-                                                <input type="text" id="phone" name="nin" value=""
-                                                    class="form-control text-center" maxlength="11" required />
-                                            </div>
-                                            <div class="col-md-12 mx-auto">
+
+                                            <div class="form-group mt-3">
+                                                <label for="lastName">Last Name</label>
+                                                <input type="text" id="lastName" name="lastName" class="form-control" value="" required />
                                             </div>
                                         </div>
-                                        <button type="submit" id="verifyNIN" class="btn btn-primary"><i
-                                                class="lar la-check-circle"></i> Check NIN Details (₦ {{$ServiceFee->amount}})</button>
-                                    </form>
-                                </div>
+
+                                        <!-- Right Column -->
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="dob">Date of Birth</label>
+                                                <input type="date" id="dob" name="dob" class="form-control" value="" required />
+                                            </div>
+
+                                            <div class="form-group mt-3">
+                                                <label for="gender">Gender</label>
+                                                <select id="gender" name="gender" class="form-control" required>
+                                                    <option value="">-- Select ---</option>
+                                                    <option value="MALE">MALE</option>
+                                                    <option value="FEMALE">FEMALE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Submit Button Section -->
+                                    <div class="mt-4 text-center">
+                                        <button type="submit" id="verifyNIN" class="btn btn-primary">
+                                            <i class="lar la-check-circle"></i> Check NIN Details (₦ {{$ServiceFee->amount}})
+                                        </button>
+                                    </div>
+                                </form>
+
 
                             </div>
                         </div>
@@ -143,10 +170,9 @@
             <button onclick="enablePopups()">Allow Pop-ups</button>
         </div>
     </div>
-
 @endsection
 @push('scripts')
-    <script src="{{ asset('assets/js/nin-phone.js') }}"></script>
+    <script src="{{ asset('assets/js/nin-demo.js') }}"></script>
     <script>
         function checkPopupStatus() {
 

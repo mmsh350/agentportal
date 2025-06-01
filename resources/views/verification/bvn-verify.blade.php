@@ -86,7 +86,7 @@
                                         <button type="submit" id="verifyBVN" class="btn btn-primary"><i
                                                 class="lar la-check-circle"></i>
                                             Check BVN
-                                            Details</button>
+                                            Details (₦ {{$BVNFee->amount}})</button>
                                     </form>
                                 </div>
 

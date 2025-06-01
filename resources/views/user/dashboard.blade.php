@@ -224,7 +224,7 @@
 
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Verify NIN Demographic</h5>
-                                        <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
+                                        <a href="{{ route('user.verify-demo') }}" class="stretched-link"></a>
                                     </div>
                                 </div>
                             </div>
@@ -290,7 +290,7 @@
 
                                         </div>
                                         <h5 class="icon-box-title mb-0 fw-bold">Instant Validation</h5>
-                                        <a href="{{ route('user.personalize-nin') }}" class="stretched-link"></a>
+                                        <a href="#" class="stretched-link"></a>
                                     </div>
                                 </div>
                             </div>

@@ -83,7 +83,7 @@
                                             </div>
                                         </div>
                                         <button type="submit" id="verifyNIN" class="btn btn-primary"><i
-                                                class="lar la-check-circle"></i> Check NIN Details</button>
+                                                class="lar la-check-circle"></i> Check NIN Details (₦ {{$ServiceFee->amount}})</button>
                                     </form>
                                 </div>
 

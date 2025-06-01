@@ -80,7 +80,22 @@ class VerificationController extends Controller
 
         return view('verification.nin-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee'));
     }
+    public function demoVerify()
+    {
 
+        $serviceCodes = ['113', '106', '107', '105'];
+        $services = Service::whereIn('service_code', $serviceCodes)
+            ->get()
+            ->keyBy('service_code');
+
+        // Extract specific service fees
+        $ServiceFee = $services->get('113') ?? 0.00;
+        $standard_nin_fee = $services->get('106') ?? 0.00;
+        $premium_nin_fee = $services->get('107') ?? 0.00;
+        $regular_nin_fee = $services->get('105') ?? 0.00;
+
+        return view('verification.demo-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee'));
+    }
     public function bvnVerify()
     {
         // Fetch all required service fees in one query
@@ -244,6 +259,135 @@ class VerificationController extends Controller
                     return response()->json([
                         'status' => 'Not Found',
                         'errors' => ['Succesfully Verified with ( NIN do not exist)'],
+                    ], 422);
+                }else if(isset($response['status']) && $response['status'] === 'caption'){
+
+                    return response()->json([
+                        'status' => 'Verification Failed',
+                        'errors' => ['Caption: '.$response['message']],
+                    ], 422);
+
+                }else {
+                    return response()->json([
+                        'status' => 'Verification Failed',
+                        'errors' => ['Verification Failed: No need to worry, your wallet remains secure and intact. Please try again or contact support for assistance.'],
+                    ], 422);
+                }
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'Request failed',
+                    'errors' => ['An error occurred while making the API request'],
+                ], 422);
+            }
+        }
+    }
+
+    public function ninDemoRetrieve(Request $request)
+    {
+
+        $request->validate([
+            'gender' => ['required', 'in:MALE,FEMALE'],
+            'dob' => ['required', 'date'],
+            'lastName' => ['required', 'string', 'max:255'],
+            'firstName' => ['required', 'string', 'max:255'],
+        ]);
+
+        //NIN Services Fee
+        $ServiceFee = 0;
+
+        $ServiceFee = Service::where('service_code', '113')
+            ->where('status', 'enabled')
+            ->first();
+
+        if (!$ServiceFee)
+            return response()->json([
+                'message' => 'Error',
+                'errors' => ['Service Error' => 'Sorry Action not Allowed !'],
+            ], 422);
+
+        $ServiceFee = $ServiceFee->amount;
+
+        $loginUserId = auth()->user()->id;
+
+        //Check if wallet is funded
+        $wallet = Wallet::where('user_id', $loginUserId)->first();
+        $wallet_balance = $wallet->balance;
+        $balance = 0;
+
+        if ($wallet_balance < $ServiceFee) {
+            return response()->json([
+                'message' => 'Error',
+                'errors' => ['Wallet Error' => 'Sorry Wallet Not Sufficient for Transaction !'],
+            ], 422);
+        } else {
+
+            try {
+
+                $data = [
+                    'idType' => 'doc',
+                    'firstName' => $request->input('firstName'),
+                    'lastName' => $request->input('lastName'),
+                    'dob' => $request->input('dob'),
+                    'gender' => $request->input('gender'),
+                    'consent' => true,
+                ];
+
+                $url = env('BASE_URL_VERIFY_USER') . '/api/doc/index.php';
+                $token = env('VERIFY_USER_TOKEN');
+
+                $headers = [
+                    'Accept: application/json, text/plain, */*',
+                    'Content-Type: application/json',
+                    "Authorization: Bearer $token",
+                ];
+
+                // Initialize cURL
+                $ch = curl_init();
+
+                // Set cURL options
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+                // Execute request
+                $response = curl_exec($ch);
+
+                // Check for cURL errors
+                if (curl_errno($ch)) {
+                    throw new \Exception('cURL Error: ' . curl_error($ch));
+                }
+
+                // Close cURL session
+                curl_close($ch);
+
+                $response = json_decode($response, true);
+
+                //Log response
+                Log::info('NIN DEMO Vericiation', $response);
+
+                if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] !== self::RESP_MESSAGE) {
+
+                    $data = $response['message'];
+
+                    $this->processResponseDataForNINDEMO($data);
+
+                    $balance = $wallet->balance - $ServiceFee;
+
+                    Wallet::where('user_id', $loginUserId)
+                        ->update(['balance' => $balance]);
+
+                    $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
+
+                    $this->transactionService->createTransaction($loginUserId, $ServiceFee, 'NIN Verification', $serviceDesc,  'Wallet', 'Approved');
+
+                    return json_encode(['status' => 'success', 'data' => $data]);
+                } else if (isset($response['status']) && $response['status'] === self::RESP_STATUS_SUCCESS && $response['message'] === 'norecord') {
+
+                    return response()->json([
+                        'status' => 'Not Found',
+                        'errors' => ['Succesfully Verified with ( No record found)'],
                     ], 422);
                 }else if(isset($response['status']) && $response['status'] === 'caption'){
 
@@ -555,8 +699,11 @@ class VerificationController extends Controller
 
             } elseif (isset($response['status']) && $response['status'] === false) {
 
-
-                    //process refund & NIN Services Fee
+                    if($response['message'] == "New"){
+                        return redirect()->route('user.ipe')
+                        ->with('error', 'Your request is still been processed!.' );
+                    }else{
+                         //process refund & NIN Services Fee
                     $ServiceFee = 0;
 
                     $ServiceFee = Service::where('service_code', '112')
@@ -584,13 +731,18 @@ class VerificationController extends Controller
                             ->update(['balance' => $balance]);
 
                         IpeRequest::where('trackingId', $trackingId)
-                            ->update(['refunded_at' => Carbon::now(), 'reply' => 'Refunded']);
+                            ->update(['refunded_at' => Carbon::now(), 'reply' => $response['message']]);
 
                         $this->transactionService->createTransaction($this->loginId, $ServiceFee, 'IPE Refund', "IPE Refund for Tracking ID: {$trackingId}",  'Wallet', 'Approved');
 
                 return redirect()->route('user.ipe')
                     ->with('error',  'IPE Request '.$response['message'].' A Refund has been processed.');
+                }else{
+                    return redirect()->route('user.ipe')
+                    ->with('error',  'IPE Request '.' Already Refunded! .');
                 }
+                    }
+
             } else {
                 return redirect()->route('user.ipe')
                     ->with('error', $response['message'] );
@@ -828,6 +980,38 @@ class VerificationController extends Controller
                     'errors' => ['An error occurred while making the API request'],
                 ], 422);
             }
+        }
+    }
+
+    public function processResponseDataForNINDEMO($data)
+    {
+
+        try {
+            Verification::create([
+                'idno' => $data['idNumber'],
+                'type' => 'NIN',
+                'nin' => $data['idNumber'],
+                'trackingId' => $data['trackingId'],
+                'first_name' => $data['firstName'],
+                'middle_name' => $data['middleName'],
+                'last_name' => $data['lastName'],
+                'phoneno' => $data['mobile'],
+                'dob' => \Carbon\Carbon::createFromFormat('d-m-Y', $data['dateOfBirth'])->format('Y-m-d'),
+                'gender' => $data['gender'] == 'm' || $data['gender'] == 'Male' ? 'Male' : 'Female',
+                'state' => $data['state'],
+                'lga' => $data['lga'],
+                'address' => $data['addressLine'],
+                'photo' => $data['photo'],
+            ]);
+        } catch (\Exception $e) {
+
+            Log::error('Verification creation failed: ' . $e->getMessage());
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Failed to create verification record.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 

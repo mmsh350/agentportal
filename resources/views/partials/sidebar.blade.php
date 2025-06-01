@@ -53,6 +53,14 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="{{ route('user.ipe') }}">
+                <i class="mdi mdi-sync menu-icon"></i>
+                <span class="menu-title">Instant IPE</span>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
             <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}" href="{{ route('user.verify-nin-phone') }}">
                 <i class="mdi mdi-phone menu-icon"></i>
                 <span class="menu-title">Verify NIN PHONE</span>
@@ -60,32 +68,26 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}" href="{{ route('user.verify-nin-phone') }}">
+            <a class="nav-link {{ Route::is('user.verify-demo') ? 'active' : '' }}" href="{{ route('user.verify-demo') }}">
                 <i class="mdi mdi-account-group menu-icon"></i>
                 <span class="menu-title">NIN Demographic</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="{{ route('user.ipe') }}">
+            <a class="nav-link {{ Route::is('user.personalize-nin') ? 'active' : '' }}" href="{{ route('user.personalize-nin') }}">
                 <i class="mdi mdi-magnify menu-icon"></i>
-                <span class="menu-title">Instant IPE</span>
+                <span class="menu-title">NIN Personalize</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="{{ route('user.ipe') }}">
+            <a class="nav-link {{ Route::is('user.ipe') ? 'active' : '' }}" href="#">
                 <i class="mdi mdi-sync menu-icon"></i>
                 <span class="menu-title">Instant Validation</span>
             </a>
         </li>
 
-        <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.personalize-nin') ? 'active' : '' }}" href="{{ route('user.personalize-nin') }}">
-                <i class="mdi mdi-magnify menu-icon"></i>
-                <span class="menu-title">Personalization</span>
-            </a>
-        </li>
 
         <li class="nav-item">
             <a class="nav-link" href="{{ route('user.support') }}">

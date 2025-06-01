@@ -103,7 +103,7 @@
                                                                 <td>
                                                                     {{ $data->reply ?? 'No reply yet' }}
                                                                     <div>
-                                                                        @if($data->reply && ($data->reply!= 'Refunded'))
+                                                                        @if($data->reply && (!in_array($data->reply, ['Refunded', 'Failed', 'Blocked'])))
                                                                         <a href="{{ route('user.personalize-nin-auto', $data->reply) }}"
                                                                             class="text-primary text-decoration-none small">
                                                                             <i class="bi bi-pencil-square"></i> Personalize

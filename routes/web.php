@@ -50,11 +50,10 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::get('/nin-personalize-auto/{id}', [VerificationController::class, 'ninPersonalize'])->name('personalize-nin-auto');
             Route::get('/ipe', [VerificationController::class, 'showIpe'])->name('ipe');
             Route::get('/bvn-enrollment', [EnrollmentController::class, 'bvnEnrollment'])->name('bvn-enrollment');
+            Route::get('/verify-demo', [VerificationController::class, 'demoVerify'])->name('verify-demo');
 
             //Ipe request
-
             Route::post('/ipe-request', [VerificationController::class, 'ipeRequest'])->name('ipe-request');
-
             Route::get('/ipeStatus/{id}', [VerificationController::class, 'ipeRequestStatus'])->name('ipeStatus');
 
 
@@ -70,6 +69,7 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             //Verification-----------------------------------------------------------------------------------------------------
             //NIN
             Route::post('/nin-retrieve', [VerificationController::class, 'ninRetrieve'])->name('ninRetrieve');
+            Route::post('/nin-demo-retrieve', [VerificationController::class, 'ninDemoRetrieve'])->name('nin-demo-Retrieve');
             Route::post('/nin-phone-retrieve', [VerificationController::class, 'ninPhoneRetrieve'])->name('ninPhoneRetrieve');
             Route::post('/nin-track-retrieve', [VerificationController::class, 'ninTrackRetrieve'])->name('ninTrackRetrieve');
             //BVN
