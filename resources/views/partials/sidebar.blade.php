@@ -39,21 +39,24 @@
 
         <!-- Verification Section -->
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.verify-nin') ? 'active' : '' }}" href="{{ route('user.verify-nin') }}">
+            <a class="nav-link {{ Route::is('user.verify-nin') ? 'active' : '' }}"
+                href="{{ route('user.verify-nin') }}">
                 <i class="mdi mdi-fingerprint menu-icon"></i>
                 <span class="menu-title">Verify NIN</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.verify-bvn') ? 'active' : '' }}" href="{{ route('user.verify-bvn') }}">
+            <a class="nav-link {{ Route::is('user.verify-bvn') ? 'active' : '' }}"
+                href="{{ route('user.verify-bvn') }}">
                 <i class="mdi mdi-fingerprint menu-icon"></i>
                 <span class="menu-title">Verify BVN</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.bvn-phone-search') ? 'active' : '' }}" href="{{ route('user.bvn-phone-search') }}">
+            <a class="nav-link {{ Route::is('user.bvn-phone-search') ? 'active' : '' }}"
+                href="{{ route('user.bvn-phone-search') }}">
                 <i class="mdi mdi-magnify menu-icon"></i>
                 <span class="menu-title">BVN Search</span>
             </a>
@@ -66,28 +69,32 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.nin-validation') ? 'active' : '' }}" href="{{route('user.nin-validation')}}">
+            <a class="nav-link {{ Route::is('user.nin-validation') ? 'active' : '' }}"
+                href="{{ route('user.nin-validation') }}">
                 <i class="mdi mdi-sync menu-icon"></i>
                 <span class="menu-title">NIN Validation</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}" href="{{ route('user.verify-nin-phone') }}">
+            <a class="nav-link {{ Route::is('user.verify-nin-phone') ? 'active' : '' }}"
+                href="{{ route('user.verify-nin-phone') }}">
                 <i class="mdi mdi-phone menu-icon"></i>
                 <span class="menu-title">Verify NIN PHONE</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.verify-demo') ? 'active' : '' }}" href="{{ route('user.verify-demo') }}">
+            <a class="nav-link {{ Route::is('user.verify-demo') ? 'active' : '' }}"
+                href="{{ route('user.verify-demo') }}">
                 <i class="mdi mdi-account-group menu-icon"></i>
                 <span class="menu-title">NIN Demographic</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link {{ Route::is('user.personalize-nin') ? 'active' : '' }}" href="{{ route('user.personalize-nin') }}">
+            <a class="nav-link {{ Route::is('user.personalize-nin') ? 'active' : '' }}"
+                href="{{ route('user.personalize-nin') }}">
                 <i class="mdi mdi-magnify menu-icon"></i>
                 <span class="menu-title">NIN Personalize</span>
             </a>
@@ -100,7 +107,7 @@
             </a>
         </li>
         <!-- Admin Section -->
-        @if (in_array(auth()->user()->role, ['admin', 'super_admin']))
+        @if (in_array(auth()->user()->role, ['admin', 'super admin']))
             <li class="nav-item">
                 <a href="#" class="nav-link" onclick="toggleSubmenu(event, 'adminSubmenu')">
                     <i class="mdi mdi-cog-outline menu-icon"></i>
@@ -108,12 +115,24 @@
                     <i class="mdi mdi-chevron-down ms-auto"></i>
                 </a>
                 <ul class="sub-menu nav flex-column ps-4" id="adminSubmenu">
-                    <li class="nav-item">
-                        <a class="nav-link {{ Route::is('admin.services.index') ? 'active' : '' }}" href="{{ route('admin.services.index') }}">
-                            <i class="mdi mdi-pencil menu-icon"></i> Services
-                        </a>
-                    </li>
+
+                    @if (in_array(auth()->user()->role, ['super admin']))
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::is('admin.services.index') ? 'active' : '' }}"
+                                href="{{ route('admin.services.index') }}">
+                                <i class="mdi mdi-pencil menu-icon"></i> Services
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{ Route::is('admin.users.index') ? 'active' : '' }}"
+                                href="{{ route('admin.users.index') }}">
+                                <i class="mdi mdi mdi-account-multiple menu-icon"></i> Users
+                            </a>
+                        </li>
+                    @endif
                 </ul>
+
             </li>
         @endif
         <!-- Logout Section -->

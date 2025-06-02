@@ -7,6 +7,7 @@ use App\Http\Controllers\EnrollmentSyncController;
 use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VerificationController;
 use App\Http\Controllers\WalletController;
 use Illuminate\Support\Facades\Route;
@@ -119,4 +120,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
     Route::get('/services', [ServicesController::class, 'index'])->name('services.index');
     Route::get('/services/edit/{id}', [ServicesController::class, 'edit'])->name('services.edit');
     Route::put('/services/update/{id}', [ServicesController::class, 'update'])->name('services.update');
+
+    Route::get('/receipt/{referenceId}', [TransactionController::class, 'reciept'])->name('reciept');
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [UserController::class, 'show'])->name('user.show');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
+    Route::patch('/users/{user}/activate', [UserController::class, 'activate'])->name('user.activate');
 });

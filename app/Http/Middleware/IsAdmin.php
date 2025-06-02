@@ -33,7 +33,7 @@ class IsAdmin
         }
 
         // Allow admins or proceed for all others
-        if (Auth::user()->role === 'admin') {
+        if (in_array(Auth::user()->role, ['admin', 'super admin'])) {
             return $next($request);
         }
 

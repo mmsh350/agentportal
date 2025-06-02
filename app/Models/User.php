@@ -90,6 +90,11 @@ class User extends Authenticatable
 
     public function bonusHistories()
     {
-        return $this->hasMany(BonusHistory::class,'user_id');
+        return $this->hasMany(BonusHistory::class, 'user_id');
+    }
+
+    public function scopeExcludeAdmin($query)
+    {
+        return $query->where('id', '!=', 1);
     }
 }
