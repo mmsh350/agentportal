@@ -23,4 +23,16 @@ class TransactionController extends Controller
 
         return view('user.receipt', ['transaction' => $transaction]);
     }
+
+    public function recieptAdmin(Request $request)
+    {
+
+        $transaction = Transaction::where('referenceId', $request->referenceId)->first();
+
+        if (! $transaction) {
+            abort(404);
+        }
+
+        return view('user.receipt', ['transaction' => $transaction]);
+    }
 }

@@ -50,9 +50,9 @@ class VirtualAccountRepository
                     "contractCode"         => $this->contractCode,
                     "customerEmail"        => $userDetails->email,
                     "customerName"         => $userDetails->name,
-                    "bvn"                  => '22192051259',
+                    "bvn"                  => '22705871738',
                     "getAllAvailableBanks" => false,
-                    "preferredBanks"       => [$bankCode1, $bankCode2,$bankCode3],
+                    "preferredBanks"       => [$bankCode1, $bankCode2, $bankCode3],
                 ];
 
                 Log::info($data);
@@ -103,7 +103,7 @@ class VirtualAccountRepository
 
                 // Iterate through accounts and prepare data for insertion
                 foreach ($accounts as $account) {
-                    if (in_array($account['bankCode'], [$bankCode1, $bankCode2,$bankCode3])) {
+                    if (in_array($account['bankCode'], [$bankCode1, $bankCode2, $bankCode3])) {
                         $insertData[] = [
                             'user_id' => $loginUserId,
                             'accountReference' => $accountReference,
