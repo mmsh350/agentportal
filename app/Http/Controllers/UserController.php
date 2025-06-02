@@ -6,7 +6,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -16,9 +16,17 @@ class UserController extends Controller
     {
         $this->transactionService = $transactionService;
     }
+    public function userCheck()
+    {
 
+        if (auth()->user()->role != 'super admin')
+            abort(403, 'Unauthorized');
+    }
     public function index(Request $request)
     {
+
+        $this->userCheck();
+
         $query = User::query()->ExcludeAdmin();
 
         $allUsers = User::count();
@@ -44,6 +52,7 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $this->userCheck();
 
         $transactions = Transaction::where('user_id', $user->id)->latest()->limit(10)->get();
 
@@ -52,11 +61,14 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
+        $this->userCheck();
         return view('admin.users.edit', compact('user'));
     }
 
     public function activate(User $user)
     {
+        $this->userCheck();
+
         $user->is_active = !$user->is_active;
         $user->save();
 
@@ -65,6 +77,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
+        $this->userCheck();
+
         $request->validate([
             'name' => 'nullable|string',
             'phone_number' => 'nullable|string',

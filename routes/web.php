@@ -121,11 +121,19 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
     Route::get('/services/edit/{id}', [ServicesController::class, 'edit'])->name('services.edit');
     Route::put('/services/update/{id}', [ServicesController::class, 'update'])->name('services.update');
 
-    Route::get('/receipt/{referenceId}', [TransactionController::class, 'reciept'])->name('reciept');
+    Route::get('/receipt/{referenceId}', [TransactionController::class, 'recieptAdmin'])->name('reciept');
 
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
     Route::get('/users/{user}', [UserController::class, 'show'])->name('user.show');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::put('/users/{user}', [UserController::class, 'update'])->name('user.update');
     Route::patch('/users/{user}/activate', [UserController::class, 'activate'])->name('user.activate');
+
+    Route::get('/nin-services', [ServicesController::class, 'ninServicesList'])->name('nin.services.list');
+    Route::post('/requests/{id}/{type}/update-status', [ServicesController::class, 'updateRequestStatus'])->name('update-request-status');
+    Route::get('/view-request/{id}/{type}/edit', [ServicesController::class, 'showRequests'])->name('view-request');
+
+    Route::get('/bvn-services', [ServicesController::class, 'bvnServicesList'])->name('bvn.services.list');
+    Route::post('/requests/{id}/{type}/update-bvn-status', [ServicesController::class, 'updateBvnRequestStatus'])->name('bvn-update-request-status');
+    Route::get('/view-bvn-request/{id}/{type}/edit', [ServicesController::class, 'showBvnRequests'])->name('bvn-view-request');
 });

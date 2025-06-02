@@ -131,6 +131,20 @@
                             </a>
                         </li>
                     @endif
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('admin.nin.services.list') ? 'active' : '' }}"
+                            href="{{ route('admin.nin.services.list') }}">
+                            <i class="mdi mdi-tools menu-icon"></i>NIN Services
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('admin.bvn.services.list') ? 'active' : '' }}"
+                            href="{{ route('admin.bvn.services.list') }}">
+                            <i class="mdi mdi-tools menu-icon"></i>BVN Services
+                        </a>
+                    </li>
                 </ul>
 
             </li>
