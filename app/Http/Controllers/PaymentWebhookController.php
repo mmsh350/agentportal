@@ -105,11 +105,18 @@ class PaymentWebhookController extends Controller
         $wallet = Wallet::where('user_id', $userId)->first();
 
         if ($wallet) {  // Check if wallet exists
+
+            $fee = round($amountPaid * 0.019, 2);
+
+            // Subtract fee from the paid amount
+            $netAmount = round($amountPaid - $fee, 2);
+
             // Calculate the new balance by adding the amount paid
-            $balance = round($wallet->balance + (float) $amountPaid, 2);
-            $depositbalance = round($wallet->deposit + (float) $amountPaid, 2);
+            $balance = round($wallet->balance + (float) $netAmount, 2);
+            $depositbalance = round($wallet->deposit + (float) $netAmount, 2);
 
             // Log the new balance for debugging
+            Log::info("Fee (1.9%): $fee, Net Amount: $netAmount");
             Log::info('New Balance: ', [$balance]);
 
             // Update the wallet with the new balance
