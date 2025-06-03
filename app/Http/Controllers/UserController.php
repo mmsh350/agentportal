@@ -134,7 +134,7 @@ class UserController extends Controller
                 }
                 $serviceDesc = 'Wallet ' . $topuptype . ' with a service fee of ₦' . number_format($amount, 2);
                 $user->wallet->save();
-                $this->transactionService->createTransaction($user->id, $amount, 'Wallet Top Up',   $serviceDesc,  'Wallet', 'Approved');
+                $this->transactionService->createTransaction($user->id, $amount, 'Admin Top Up',   $serviceDesc,  'Wallet', 'Approved');
             }
         }
 
