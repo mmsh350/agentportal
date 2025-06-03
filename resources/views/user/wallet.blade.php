@@ -278,8 +278,9 @@
                                                         <li class="account-item mb-3 p-2">
                                                             <div class="d-flex align-items-start">
                                                                 <div class="bank-logo me-3">
-                                                                    <img src="{{ asset('assets/images/' . strtolower($data->bankName) . '.png') }}"
-                                                                        alt="{{ $data->bankName }} logo">
+                                                                    <img width="80px" height="80px" style="object-fit: contain;"
+                                                                    src="{{ asset('assets/images/' . strtolower($data->bankName) . '.png') }}"
+                                                                    alt="{{ $data->bankName }} logo">
                                                                 </div>
                                                                 <div class="flex-fill">
                                                                     <p class="account-name mb-1">{{ $data->accountName }}
