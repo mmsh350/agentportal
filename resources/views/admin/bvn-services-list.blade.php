@@ -213,8 +213,9 @@
                                                         </a>
 
                                                         <a type="button" data-bs-toggle="modal"
-                                                            data-id="{{ $service->id }}" data-bs-target="#reply"
-                                                            class="btn btn-light btn-sm">
+                                                            data-id="{{ $service->id }}"
+                                                            data-trxamount="{{ $service->transactions->amount }}"
+                                                            data-bs-target="#reply" class="btn btn-light btn-sm">
                                                             <i class="bi bi-pencil-square" style="font-size: 0.9rem;"></i>
                                                             Reply
                                                         </a>
@@ -310,6 +311,7 @@
                                         <label for="editor" class="form-label"><strong>Comment</strong></label>
                                         <div id="editor" class="form-control"> </div>
                                         <input type="hidden" name="comment" id="commentInput">
+                                        <input type="hidden" name="trxAmount" id="trxAmount">
                                     </div>
 
                                     <!-- Submit Button -->
@@ -327,13 +329,15 @@
 
 
 @push('scripts')
-    <script>
+    {{-- <script>
         $(document).ready(function() {
             var requestId; // This will store the ID for later use
-
+            var trxAmount;
             $('#reply').on('shown.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 requestId = button.data('id');
+                trxAmount = button.data('trxamount');
+                $('#trxAmount').val(trxAmount);
                 $("#sid").html(requestId);
 
                 // Update form action when modal is shown
@@ -385,8 +389,7 @@
                 }
             });
         });
-    </script>
-    <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const statusSelect = document.getElementById('status');
             const refundOption = document.getElementById('refundOption');
@@ -394,7 +397,9 @@
             const refundPercentageRadios = document.querySelectorAll('.refund-percentage');
 
             // Transaction amount (Replace with actual value if dynamic)
-            const transactionAmount = {{ $service->transactions->amount }};
+            const transactionAmount = document.getElementById('trxAmount').value;
+
+
 
             // Show or hide refund option based on status
             statusSelect.addEventListener('change', function() {
@@ -419,8 +424,92 @@
                 });
             });
         });
-    </script>
+    </script> --}}
+    <script>
+        $(document).ready(function() {
+            var requestId; // This will store the ID for later use
+            var trxAmount;
 
+            $('#reply').on('shown.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                requestId = button.data('id');
+                trxAmount = button.data('trxamount');
+                $('#trxAmount').val(trxAmount);
+                $("#sid").html(requestId);
+
+                // Update form action when modal is shown
+                const requestType = 'BVN Phone Search';
+                const actionUrl = `/admin/requests/${requestId}/${requestType}/update-bvn-status`;
+                document.getElementById('statusForm').setAttribute("action", actionUrl);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quill Editor
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Enter your comment...',
+            });
+
+            function clear() {
+                quill.root.innerHTML = '';
+            }
+
+            // Get DOM elements
+            const statusSelect = document.getElementById('status');
+            const refundOption = document.getElementById('refundOption');
+            const refundAmountInput = document.getElementById('refundAmount');
+            const refundPercentageRadios = document.querySelectorAll('.refund-percentage');
+            const transactionAmountElement = document.getElementById('trxAmount');
+
+            // Toggle Refund Option and handle status changes
+            statusSelect.addEventListener('change', function() {
+                clear();
+                if (this.value === 'rejected') {
+                    refundOption.classList.remove('d-none');
+                    refundAmountInput.setAttribute('required', 'required');
+                } else if (this.value === 'processing') {
+                    quill.root.innerHTML =
+                        "Thank you for reaching out. Your request has been received and is currently being processed. We will notify you promptly upon resolution.";
+                    refundOption.classList.add('d-none');
+                    refundAmountInput.removeAttribute('required');
+                    refundAmountInput.value = '';
+                    refundPercentageRadios.forEach(radio => (radio.checked = false));
+                } else {
+                    refundOption.classList.add('d-none');
+                    refundAmountInput.removeAttribute('required');
+                    refundAmountInput.value = '';
+                    refundPercentageRadios.forEach(radio => (radio.checked = false));
+                }
+            });
+
+            // Calculate refund amount based on selected percentage
+            refundPercentageRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Get the current transaction amount value and convert to number
+                    const transactionAmount = parseFloat(transactionAmountElement.value) || 0;
+                    const percentage = parseInt(this.value, 10);
+                    const refundAmount = (transactionAmount * percentage) / 100;
+                    refundAmountInput.value = refundAmount.toFixed(2); // Format to 2 decimal places
+                });
+            });
+
+            // Handle Form Submission
+            const form = document.getElementById('statusForm');
+            form.addEventListener('submit', function(event) {
+                // Get Quill content as HTML
+                const commentContent = quill.root.innerHTML;
+                // Set it in the hidden input
+                document.getElementById('commentInput').value = commentContent;
+
+                // Optionally: Validate the comment is not empty
+                if (quill.getText().trim().length === 0) {
+                    event.preventDefault();
+                    alert('Please add a comment before submitting.');
+                }
+            });
+        });
+    </script>
     <!-- Quill Editor JS -->
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <!-- Internal Quill JS -->
