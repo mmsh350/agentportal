@@ -90,7 +90,7 @@ class PaymentWebhookController extends Controller
             'payer_email' => $payerEmail,
             'payer_phone' => $payerPhone,
             'referenceId' => $transactionReference,
-            'type' => 'Wallet Topup',
+            'service_type' => 'Wallet Topup',
             'service_description' => 'Your wallet has been credited with ₦' . number_format($amountPaid, 2),
             'amount' => $amountPaid,
             'gateway' => 'Monnify',
