@@ -97,10 +97,12 @@ Route::middleware(['auth', 'user.active'])->group(function () {
 
             //Whatsapp API Support--------------------------------------------------------------------------
             Route::get('/support', function () {
-                $phoneNumber = env('phoneNumber');
-                $message = urlencode(env('message'));
-                $url = env('API_URL') . "{$phoneNumber}&text={$message}";
-                return redirect($url);
+                // // $phoneNumber = env('phoneNumber');
+                // // $message = urlencode(env('message'));
+                // $url = env('API_URL') . "{$phoneNumber}&text={$message}";
+                // return redirect($url);
+                //New Implementation
+                return redirect()->away(env('API_URL'));
             })->name('support');
         });
     });
