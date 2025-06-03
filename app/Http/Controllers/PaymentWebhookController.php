@@ -84,6 +84,10 @@ class PaymentWebhookController extends Controller
 
     private function insertTransaction($userId, $transactionReference, $amountPaid, $payerName, $payerEmail, $payerPhone)
     {
+        $fee = $this->calculateFee($amountPaid);
+
+        $netAmount = round($amountPaid - $fee, 2);
+
         Transaction::insert([
             'user_id' => $userId,
             'payer_name' => $payerName,
@@ -92,7 +96,7 @@ class PaymentWebhookController extends Controller
             'referenceId' => $transactionReference,
             'service_type' => 'Wallet Topup',
             'service_description' => 'Your wallet has been credited with ₦' . number_format($amountPaid, 2),
-            'amount' => $amountPaid,
+            'amount' => $netAmount,
             'gateway' => 'Monnify',
             'status' => 'Approved',
             'created_at' => Carbon::now(),
@@ -100,13 +104,19 @@ class PaymentWebhookController extends Controller
         ]);
     }
 
+    public function calculateFee($amountPaid){
+
+       return  $fee = round($amountPaid * 0.019, 2);
+
+    }
     private function updateWalletBalance($userId, $amountPaid)
     {
         $wallet = Wallet::where('user_id', $userId)->first();
 
         if ($wallet) {  // Check if wallet exists
 
-            $fee = round($amountPaid * 0.019, 2);
+            //$fee = round($amountPaid * 0.019, 2);
+            $fee = $this->calculateFee($amountPaid);
 
             // Subtract fee from the paid amount
             $netAmount = round($amountPaid - $fee, 2);
