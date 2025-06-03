@@ -2,6 +2,12 @@
 
 @section('title', 'BVN Phone Search')
 @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
+    <style>
+        .form-check .form-check-input {
+            margin-left: 0;
+        }
+    </style>
 @endpush
 @section('content')
     <div class="row">
@@ -205,6 +211,13 @@
                                                             class="btn btn-primary btn-sm text-center">
                                                             <i class="ri-edit-line">View</i>
                                                         </a>
+
+                                                        <a type="button" data-bs-toggle="modal"
+                                                            data-id="{{ $service->id }}" data-bs-target="#reply"
+                                                            class="btn btn-light btn-sm">
+                                                            <i class="bi bi-pencil-square" style="font-size: 0.9rem;"></i>
+                                                            Reply
+                                                        </a>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -221,11 +234,194 @@
                     </div>
                 </div>
 
+                <!-- Modals -->
+                <div class="modal fade" id="reply" tabindex="-1" aria-labelledby="reply" data-bs-keyboard="true"
+                    data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h6 class="modal-title" id="staticBackdropLabel2">Reply Phone Search (#<span
+                                        id="sid"></span>)</h6>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="POST" id="statusForm">
+                                    @csrf
 
+                                    <!-- Status Selection -->
+                                    <div class="mb-3">
+                                        <label for="status" class="form-label"><strong>Select
+                                                Status</strong></label>
+                                        <select name="status" id="status" class="form-select text-dark" required>
+                                            <option value="" disabled selected>-- Choose Status --
+                                            </option>
+                                            <option value="resolved">Resolved</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="rejected">Rejected</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Refund Option -->
+                                    <div class="mb-3 d-none" id="refundOption">
+                                        <label class="form-label"><strong>Refund Options</strong></label>
+
+                                        <!-- Percentage Selection -->
+                                        <div class="d-flex gap-3">
+                                            <div class="form-check">
+                                                <input type="radio" name="refund_percentage" value="10"
+                                                    id="refund10" class="form-check-input refund-percentage ">
+                                                <label for="refund10" class="form-check-label">10%</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" name="refund_percentage" value="20"
+                                                    id="refund20" class="form-check-input refund-percentage">
+                                                <label for="refund20" class="form-check-label">20%</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" name="refund_percentage" value="30"
+                                                    id="refund30" class="form-check-input refund-percentage">
+                                                <label for="refund30" class="form-check-label">30%</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" name="refund_percentage" value="50"
+                                                    id="refund50" class="form-check-input refund-percentage">
+                                                <label for="refund50" class="form-check-label">50%</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input type="radio" name="refund_percentage" value="100"
+                                                    id="refund100" class="form-check-input refund-percentage">
+                                                <label for="refund100" class="form-check-label">100%</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- Calculated Refund Amount -->
+                                        <div class="mt-3">
+                                            <label for="refundAmount" class="form-label"><strong>Refund
+                                                    Amount
+                                                    (₦)</strong></label>
+                                            <input type="text" id="refundAmount" name="refundAmount"
+                                                class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <!-- Quill Editor Section -->
+                                    <div class="mb-3">
+                                        <label for="editor" class="form-label"><strong>Comment</strong></label>
+                                        <div id="editor" class="form-control"> </div>
+                                        <input type="hidden" name="comment" id="commentInput">
+                                    </div>
+
+                                    <!-- Submit Button -->
+                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
     </div>
-
-
 @endsection
+
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            var requestId; // This will store the ID for later use
+
+            $('#reply').on('shown.bs.modal', function(event) {
+                var button = $(event.relatedTarget);
+                requestId = button.data('id');
+                $("#sid").html(requestId);
+
+                // Update form action when modal is shown
+                const requestType = 'BVN Phone Search';
+                const actionUrl = `/admin/requests/${requestId}/${requestType}/update-bvn-status`;
+                document.getElementById('statusForm').setAttribute("action", actionUrl);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Quill Editor
+            const quill = new Quill('#editor', {
+                theme: 'snow',
+                placeholder: 'Enter your comment...',
+            });
+
+            function clear() {
+                quill.root.innerHTML = '';
+            }
+
+            // Toggle Refund Option
+            const statusSelect = document.getElementById('status');
+            const refundOption = document.getElementById('refundOption');
+            statusSelect.addEventListener('change', function() {
+                clear();
+                if (this.value === 'rejected') {
+                    refundOption.classList.remove('d-none');
+                } else if (this.value === 'processing') {
+                    quill.root.innerHTML =
+                        "Thank you for reaching out. Your request has been received and is currently being processed. We will notify you promptly upon resolution."
+                } else {
+                    refundOption.classList.add('d-none');
+                }
+            });
+
+            // Handle Form Submission
+            const form = document.getElementById('statusForm');
+
+            form.addEventListener('submit', function(event) {
+                // Get Quill content as HTML
+                const commentContent = quill.root.innerHTML;
+                // Set it in the hidden input
+                document.getElementById('commentInput').value = commentContent;
+
+                // Optionally: Validate the comment is not empty
+                if (quill.getText().trim().length === 0) {
+                    event.preventDefault();
+                    alert('Please add a comment before submitting.');
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusSelect = document.getElementById('status');
+            const refundOption = document.getElementById('refundOption');
+            const refundAmountInput = document.getElementById('refundAmount');
+            const refundPercentageRadios = document.querySelectorAll('.refund-percentage');
+
+            // Transaction amount (Replace with actual value if dynamic)
+            const transactionAmount = {{ $service->transactions->amount }};
+
+            // Show or hide refund option based on status
+            statusSelect.addEventListener('change', function() {
+                if (this.value === 'rejected') {
+                    refundOption.classList.remove('d-none');
+                    refundAmountInput.setAttribute('required', 'required');
+
+                } else {
+                    refundOption.classList.add('d-none');
+                    refundAmountInput.removeAttribute('required');
+                    refundAmountInput.value = '';
+                    refundPercentageRadios.forEach(radio => (radio.checked = false));
+                }
+            });
+
+            // Calculate refund amount based on selected percentage
+            refundPercentageRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    const percentage = parseInt(this.value, 10);
+                    const refundAmount = (transactionAmount * percentage) / 100;
+                    refundAmountInput.value = `${refundAmount}`;
+                });
+            });
+        });
+    </script>
+
+    <!-- Quill Editor JS -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <!-- Internal Quill JS -->
+@endpush
