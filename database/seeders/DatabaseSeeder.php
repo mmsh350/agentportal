@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
                 'name' => 'Agent Portal',
                 'email_verified_at' => now(),
                 'password' => Hash::make('@passwd12345'),
-                'role' => 'admin',
+                'role' => 'super admin',
             ]
         );
 

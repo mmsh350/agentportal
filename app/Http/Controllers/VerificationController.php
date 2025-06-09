@@ -100,7 +100,7 @@ class VerificationController extends Controller
     public function ninVerify()
     {
 
-        $serviceCodes = ['104', '106', '107', '105'];
+        $serviceCodes = ['104', '106', '107', '105','116'];
         $services = Service::whereIn('service_code', $serviceCodes)
             ->get()
             ->keyBy('service_code');
@@ -110,8 +110,9 @@ class VerificationController extends Controller
         $standard_nin_fee = $services->get('106') ?? 0.00;
         $premium_nin_fee = $services->get('107') ?? 0.00;
         $regular_nin_fee = $services->get('105') ?? 0.00;
+        $basic_nin_fee = $services->get('116') ?? 0.00;
 
-        return view('verification.nin-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee'));
+        return view('verification.nin-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee'));
     }
     public function demoVerify()
     {
@@ -1180,10 +1181,15 @@ class VerificationController extends Controller
                 'phoneno' => $data['telephoneno'],
                 'dob' => \Carbon\Carbon::createFromFormat('d-m-Y', $data['birthdate'])->format('Y-m-d'),
                 'gender' => $data['gender'] == 'm' || $data['gender'] == 'Male' ? 'Male' : 'Female',
-                'state' => $data['residence_state'],
-                'lga' => $data['residence_lga'],
+                'state' => $data['self_origin_state'],
+                'lga' => $data['self_origin_lga'],
+                'residence_state' => $data['residence_state'],
+                'residence_lga' => $data['residence_lga'],
+                'residence_town' => $data['residence_town'],
+                'town' => $data['self_origin_place'],
                 'address' => $data['residence_AdressLine1'],
                 'photo' => $data['image'],
+                'signature' => $data['signature'],
             ]);
         } catch (\Exception $e) {
 
@@ -1527,4 +1533,39 @@ class VerificationController extends Controller
             return  $response;
         }
     }
+
+    public function basicSlip($nin_no)
+    {
+        //NIN Services Fee
+        $ServiceFee = 0;
+        $ServiceFee = Service::where('service_code', '116')->first();
+        $ServiceFee = $ServiceFee->amount;
+
+        //Check if wallet is funded
+        $wallet = Wallet::where('user_id', $this->loginId)->first();
+        $wallet_balance = $wallet->balance;
+        $balance = 0;
+
+        if ($wallet_balance  < $ServiceFee) {
+            return response()->json([
+                "message" => "Error",
+                "errors" => array("Wallet Error" => "Sorry Wallet Not Sufficient for Transaction !")
+            ], 422);
+        } else {
+            $balance = $wallet->balance - $ServiceFee;
+
+            $affected = Wallet::where('user_id', $this->loginId)
+                ->update(['balance' => $balance]);
+
+            $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
+
+            $this->transactionService->createTransaction($this->loginId, $ServiceFee, 'Basic NIN Slip', $serviceDesc,  'Wallet', 'Approved');
+
+            //Generate PDF
+            $repObj = new NIN_PDF_Repository();
+            $response = $repObj->basicPDF($nin_no);
+            return  $response;
+        }
+    }
+
 }

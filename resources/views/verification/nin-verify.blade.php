@@ -135,6 +135,13 @@
                                                 Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})
                                             </a>
                                         </div>
+                                        <div>
+                                            <a href="#" id="basicSlip" type="button"
+                                               class="btn btn-dark btn-wave w-100">
+                                               <i class="bi bi-download"></i>&nbsp;
+                                               Basic NIN Slip (&#x20A6;{{ $basic_nin_fee->amount }})
+                                            </a>
+                                         </div>
                                     </div>
                                 </div>
 
