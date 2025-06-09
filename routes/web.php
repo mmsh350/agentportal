@@ -94,7 +94,7 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::get('/regularSlip/{id}', [VerificationController::class, 'regularSlip'])->name("regularSlip");
             Route::get('/standardSlip/{id}', [VerificationController::class, 'standardSlip'])->name("standardSlip");
             Route::get('/premiumSlip/{id}', [VerificationController::class, 'premiumSlip'])->name("premiumSlip");
-
+            Route::get('/basicSlip/{id}', [VerificationController::class, 'basicSlip'])->name("basicSlip");
             //Whatsapp API Support--------------------------------------------------------------------------
             Route::get('/support', function () {
                 // // $phoneNumber = env('phoneNumber');
