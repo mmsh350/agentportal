@@ -282,7 +282,6 @@
                                     </div>
                                 @else
                                     <div class="text-center">
-                                        <img src="{{ asset('assets/images/no-transaction.gif') }}" alt="No Request" style="width: 65%;">
                                         <p class="fw-semibold fs-5 mt-3">No Request Available!</p>
                                     </div>
                                 @endif
@@ -302,7 +301,7 @@
     </div>
 @endsection
 @push('scripts')
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="{{ asset('assets/js/nin.js') }}"></script>
