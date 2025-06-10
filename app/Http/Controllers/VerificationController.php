@@ -112,7 +112,11 @@ class VerificationController extends Controller
         $regular_nin_fee = $services->get('105') ?? 0.00;
         $basic_nin_fee = $services->get('116') ?? 0.00;
 
-        return view('verification.nin-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee'));
+        $user = auth()->user();
+
+        $latestVerifications = $user->verifications()->latest()->paginate(5);
+
+        return view('verification.nin-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee','latestVerifications'));
     }
     public function demoVerify()
     {
@@ -1171,6 +1175,7 @@ class VerificationController extends Controller
 
         try {
             $user = Verification::create([
+                'user_id' => auth()->user()->id,
                 'idno' => $data['nin'],
                 'type' => 'NIN',
                 'nin' => $data['nin'],

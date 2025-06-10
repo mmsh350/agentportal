@@ -46,23 +46,7 @@
                                 Verify NIN
                             </div>
                         </div>
-                        <div class="card-body ">
-                            {{-- <div class="alert alert-danger shadow-sm">
-                                <center><svg class="d-block" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                                        width="36" height="36" fill="currentColor">
-                                        <path
-                                            d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22ZM11 11V17H13V11H11ZM11 7V9H13V7H11Z">
-                                        </path>
-                                    </svg>
-                                    <p> Note that &#x20A6;{{ $ServiceFee->amount }} fee will be deducted from your
-                                        wallet balance for each verification attempt, regardless of the outcome.
-                                        This includes instances where the NIN is not successfully verified or if the
-                                        data is not found.
-                                    <p> Please confirm you have sufficient funds in your wallet before proceeding
-                                        with the verification.
-                                </center>
-                            </div> --}}
-
+                        <div class="card-body">
                             <div class="alert alert-danger alert-dismissible text-center" id="errorMsg"
                                 style="display:none;" role="alert">
                                 <small id="message">Processing your request.</small>
@@ -149,6 +133,164 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="col-xl-12 mt-2">
+                    <div class="card custom-card">
+                        <div class="card-header justify-content-between">
+                            <div class="card-title m-0">
+                                <i class="ri-user-search-line fw-bold"></i> Verification History
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-md-12">
+                                @if (!$latestVerifications->isEmpty())
+                                    @php
+                                        $currentPage = $latestVerifications->currentPage();
+                                        $perPage = $latestVerifications->perPage();
+                                        $serialNumber = ($currentPage - 1) * $perPage + 1;
+                                    @endphp
+
+                                    {{-- <div class="table-responsive">
+                                        <table class="table text-nowrap" style="background:#fafafc !important">
+                                            <thead class="thead-primary bg-primary text-white">
+                                                <tr>
+                                                    <th width="5%">#</th>
+                                                    <th>NIN Number</th>
+                                                    <th>Tracking Id</th>
+                                                    <th>Status</th>
+                                                    <th>Download Slip</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($latestVerifications as $data)
+                                                    <tr>
+                                                        <td>{{ $serialNumber++ }}</td>
+                                                        <td>{{ $data->idno }}</td>
+                                                        <td>{{$data->trackingId}}</td>
+                                                        <td> <span class="badge bg-success"> Success</span></td>
+                                                        <td>
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
+                                                                        id="dropdownMenuButton{{ $data->id }}"
+                                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    Choose Type
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $data->idno }}">
+                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular"><i class="bi bi-download"></i>  Regular (&#x20A6;{{ $regular_nin_fee->amount }})</a>
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard"><i class="bi bi-download"></i>  Standard (&#x20A6;{{ $standard_nin_fee->amount }})</a>
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium"><i class="bi bi-download"></i>  Premium (&#x20A6;{{ $premium_nin_fee->amount }})</a>
+                                                                    <div class="dropdown-divider"></div>
+                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic"><i class="bi bi-download"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})</a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div> --}}
+                                    {{-- Desktop Table --}}
+<div class="table-responsive d-none d-md-block">
+    <table class="table table-hover align-middle text-nowrap" style="background:#fafafc">
+        <thead class="thead-primary bg-primary text-white">
+            <tr>
+                <th width="5%">#</th>
+                <th>NIN Number</th>
+                <th>Tracking ID</th>
+                <th>Status</th>
+                <th>Download Slip</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($latestVerifications as $data)
+                <tr>
+                    <td>{{ $serialNumber++ }}</td>
+                    <td>{{ $data->idno }}</td>
+                    <td>{{ $data->trackingId }}</td>
+                    <td>
+                        <span class="badge bg-success text-white">Success</span>
+                    </td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                    id="dropdownMenuButton{{ $data->id }}"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Choose Type
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $data->id }}">
+                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
+                                    <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
+                                </a>
+                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
+                                    <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
+                                </a>
+                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
+                                    <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
+                                </a>
+                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
+                                    <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+
+{{-- Mobile Cards --}}
+<div class="d-block d-md-none">
+    @foreach ($latestVerifications as $data)
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body p-3">
+                <h6 class="mb-2">NIN: <strong>{{ $data->idno }}</strong></h6>
+                <p class="mb-1">Tracking ID: <strong>{{ $data->trackingId }}</strong></p>
+                <p class="mb-2">Status: <span class="badge bg-success text-white">Success</span></p>
+                <div class="dropdown">
+                    <button class="btn btn-outline-primary btn-sm btn-block dropdown-toggle" type="button"
+                            id="dropdownMenuMobile{{ $data->id }}"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Choose Download Type
+                    </button>
+                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuMobile{{ $data->id }}">
+                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
+                            <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
+                        </a>
+                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
+                            <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
+                        </a>
+                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
+                            <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
+                        </a>
+                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
+                            <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+</div>
+
+
+                                    <!-- Pagination Links -->
+                                    <div class="d-flex justify-content-center">
+                                        {{ $latestVerifications->links('vendor.pagination.bootstrap-4') }}
+                                    </div>
+                                @else
+                                    <div class="text-center">
+                                        <img src="{{ asset('assets/images/no-transaction.gif') }}" alt="No Request" style="width: 65%;">
+                                        <p class="fw-semibold fs-5 mt-3">No Request Available!</p>
+                                    </div>
+                                @endif
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -160,7 +302,11 @@
     </div>
 @endsection
 @push('scripts')
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="{{ asset('assets/js/nin.js') }}"></script>
+
     <script>
         function checkPopupStatus() {
 
