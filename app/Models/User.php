@@ -93,6 +93,11 @@ class User extends Authenticatable
         return $this->hasMany(BonusHistory::class, 'user_id');
     }
 
+    public function verifications()
+    {
+        return $this->hasMany(Verification::class);
+    }
+
     public function scopeExcludeAdmin($query)
     {
         return $query->where('id', '!=', 1);

@@ -10,6 +10,7 @@ class Verification extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'idno',
         'type',
         'nin',
@@ -35,4 +36,9 @@ class Verification extends Model
         'trackingId',
         'signature'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
