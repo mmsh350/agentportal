@@ -150,130 +150,90 @@
                                         $serialNumber = ($currentPage - 1) * $perPage + 1;
                                     @endphp
 
-                                    {{-- <div class="table-responsive">
-                                        <table class="table text-nowrap" style="background:#fafafc !important">
-                                            <thead class="thead-primary bg-primary text-white">
-                                                <tr>
-                                                    <th width="5%">#</th>
-                                                    <th>NIN Number</th>
-                                                    <th>Tracking Id</th>
-                                                    <th>Status</th>
-                                                    <th>Download Slip</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($latestVerifications as $data)
-                                                    <tr>
-                                                        <td>{{ $serialNumber++ }}</td>
-                                                        <td>{{ $data->idno }}</td>
-                                                        <td>{{$data->trackingId}}</td>
-                                                        <td> <span class="badge bg-success"> Success</span></td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-secondary dropdown-toggle btn-sm" type="button"
-                                                                        id="dropdownMenuButton{{ $data->id }}"
-                                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                    Choose Type
-                                                                </button>
-                                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $data->idno }}">
-                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular"><i class="bi bi-download"></i>  Regular (&#x20A6;{{ $regular_nin_fee->amount }})</a>
-                                                                    <div class="dropdown-divider"></div>
-                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard"><i class="bi bi-download"></i>  Standard (&#x20A6;{{ $standard_nin_fee->amount }})</a>
-                                                                    <div class="dropdown-divider"></div>
-                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium"><i class="bi bi-download"></i>  Premium (&#x20A6;{{ $premium_nin_fee->amount }})</a>
-                                                                    <div class="dropdown-divider"></div>
-                                                                    <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic"><i class="bi bi-download"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})</a>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div> --}}
+                                
                                     {{-- Desktop Table --}}
-<div class="table-responsive d-none d-md-block">
-    <table class="table table-hover align-middle text-nowrap" style="background:#fafafc">
-        <thead class="thead-primary bg-primary text-white">
-            <tr>
-                <th width="5%">#</th>
-                <th>NIN Number</th>
-                <th>Tracking ID</th>
-                <th>Status</th>
-                <th>Download Slip</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($latestVerifications as $data)
-                <tr>
-                    <td>{{ $serialNumber++ }}</td>
-                    <td>{{ $data->idno }}</td>
-                    <td>{{ $data->trackingId }}</td>
-                    <td>
-                        <span class="badge bg-success text-white">Success</span>
-                    </td>
-                    <td>
-                        <div class="dropdown">
-                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
-                                    id="dropdownMenuButton{{ $data->id }}"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Choose Type
-                            </button>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $data->id }}">
-                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
-                                    <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
-                                </a>
-                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
-                                    <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
-                                </a>
-                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
-                                    <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
-                                </a>
-                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
-                                    <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
-                                </a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+                                <div class="table-responsive d-none d-md-block">
+                                    <table class="table table-hover align-middle text-nowrap" style="background:#fafafc">
+                                        <thead class="thead-primary bg-primary text-white">
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th>NIN Number</th>
+                                                <th>Tracking ID</th>
+                                                <th>Status</th>
+                                                <th>Download Slip</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($latestVerifications as $data)
+                                                <tr>
+                                                    <td>{{ $serialNumber++ }}</td>
+                                                    <td>{{ $data->idno }}</td>
+                                                    <td>{{ $data->trackingId }}</td>
+                                                    <td>
+                                                        <span class="badge bg-success text-white">Success</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                                                    id="dropdownMenuButton{{ $data->id }}"
+                                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Choose Type
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $data->id }}">
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
+                                                                    <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
+                                                                </a>
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
+                                                                    <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
+                                                                </a>
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
+                                                                    <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
+                                                                </a>
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
+                                                                    <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
 
-{{-- Mobile Cards --}}
-<div class="d-block d-md-none">
-    @foreach ($latestVerifications as $data)
-        <div class="card mb-3 shadow-sm">
-            <div class="card-body p-3">
-                <h6 class="mb-2">NIN: <strong>{{ $data->idno }}</strong></h6>
-                <p class="mb-1">Tracking ID: <strong>{{ $data->trackingId }}</strong></p>
-                <p class="mb-2">Status: <span class="badge bg-success text-white">Success</span></p>
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary btn-sm btn-block dropdown-toggle" type="button"
-                            id="dropdownMenuMobile{{ $data->id }}"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Choose Download Type
-                    </button>
-                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuMobile{{ $data->id }}">
-                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
-                            <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
-                        </a>
-                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
-                            <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
-                        </a>
-                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
-                            <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
-                        </a>
-                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
-                            <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-</div>
+                                {{-- Mobile Cards --}}
+                                <div class="d-block d-md-none">
+                                    @foreach ($latestVerifications as $data)
+                                        <div class="card mb-3 shadow-sm">
+                                            <div class="card-body p-3">
+                                                <h6 class="mb-2">NIN: <strong>{{ $data->idno }}</strong></h6>
+                                                <p class="mb-1">Tracking ID: <strong>{{ $data->trackingId }}</strong></p>
+                                                <p class="mb-2">Status: <span class="badge bg-success text-white">Success</span></p>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-primary btn-sm btn-block dropdown-toggle" type="button"
+                                                            id="dropdownMenuMobile{{ $data->id }}"
+                                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Choose Download Type
+                                                    </button>
+                                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuMobile{{ $data->id }}">
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
+                                                            <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
+                                                        </a>
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
+                                                            <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
+                                                        </a>
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
+                                                            <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
+                                                        </a>
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
+                                                            <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
 
 
                                     <!-- Pagination Links -->
@@ -282,6 +242,7 @@
                                     </div>
                                 @else
                                     <div class="text-center">
+
                                         <p class="fw-semibold fs-5 mt-3">No Request Available!</p>
                                     </div>
                                 @endif

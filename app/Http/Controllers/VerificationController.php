@@ -121,7 +121,7 @@ class VerificationController extends Controller
     public function demoVerify()
     {
 
-        $serviceCodes = ['113', '106', '107', '105'];
+        $serviceCodes = ['113', '106', '107', '105','116'];
         $services = Service::whereIn('service_code', $serviceCodes)
             ->get()
             ->keyBy('service_code');
@@ -131,8 +131,13 @@ class VerificationController extends Controller
         $standard_nin_fee = $services->get('106') ?? 0.00;
         $premium_nin_fee = $services->get('107') ?? 0.00;
         $regular_nin_fee = $services->get('105') ?? 0.00;
+        $basic_nin_fee = $services->get('116') ?? 0.00;
 
-        return view('verification.demo-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee'));
+        $user = auth()->user();
+
+        $latestVerifications = $user->verifications()->latest()->paginate(5);
+
+        return view('verification.demo-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee','latestVerifications'));
     }
     public function bvnVerify()
     {
@@ -147,11 +152,10 @@ class VerificationController extends Controller
 
         return view('verification.bvn-verify', compact('BVNFee', 'bvn_standard_fee', 'bvn_premium_fee', 'bvn_plastic_fee'));
     }
-
     public function phoneVerify()
     {
 
-        $serviceCodes = ['111', '105', '106', '107'];
+        $serviceCodes = ['111', '105', '106', '107','116'];
         $services = Service::whereIn('service_code', $serviceCodes)
             ->get()
             ->keyBy('service_code');
@@ -161,9 +165,14 @@ class VerificationController extends Controller
         $standard_nin_fee = $services->get('106') ?? 0.00;
         $regular_nin_fee = $services->get('105') ?? 0.00;
         $premium_nin_fee = $services->get('107') ?? 0.00;
+        $basic_nin_fee = $services->get('116') ?? 0.00;
+
+        $user = auth()->user();
+
+        $latestVerifications = $user->verifications()->latest()->paginate(5);
 
 
-        return view('verification.nin-phone-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee'));
+        return view('verification.nin-phone-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee','latestVerifications'));
     }
 
     public function createAccounts()
@@ -1143,6 +1152,7 @@ class VerificationController extends Controller
 
         try {
             Verification::create([
+                'user_id' => auth()->user()->id,
                 'idno' => $data['idNumber'],
                 'type' => 'NIN',
                 'nin' => $data['idNumber'],
@@ -1153,10 +1163,15 @@ class VerificationController extends Controller
                 'phoneno' => $data['mobile'],
                 'dob' => \Carbon\Carbon::createFromFormat('d-m-Y', $data['dateOfBirth'])->format('Y-m-d'),
                 'gender' => $data['gender'] == 'm' || $data['gender'] == 'Male' ? 'Male' : 'Female',
-                'state' => $data['state'],
-                'lga' => $data['lga'],
+                'state' => $data['self_origin_state'],
+                'lga' => $data['self_origin_lga'],
+                'town' => $data['self_origin_place'],
                 'address' => $data['addressLine'],
                 'photo' => $data['photo'],
+                'signature' => $data['signature'],
+                'residence_state' => $data['residence_state'],
+                'residence_lga' => $data['residence_lga'],
+
             ]);
         } catch (\Exception $e) {
 
@@ -1258,6 +1273,7 @@ class VerificationController extends Controller
 
         try {
             $user = Verification::create([
+                'user_id' => auth()->user()->id,
                 'idno' => $data['nin'],
                 'type' => 'NIN',
                 'nin' => $data['nin'],
@@ -1268,10 +1284,16 @@ class VerificationController extends Controller
                 'phoneno' => $data['telephoneno'],
                 'dob' => \Carbon\Carbon::createFromFormat('d-m-Y', $data['birthdate'])->format('Y-m-d'),
                 'gender' => $data['gender'] == 'm' || $data['gender'] == 'Male' ? 'Male' : 'Female',
-                'state' => $data['residence_state'],
-                'lga' => $data['residence_lga'],
+                'state' => $data['self_origin_state'],
+                'lga' => $data['self_origin_lga'],
+                'town' => $data['self_origin_place'],
+                'residence_state' => $data['residence_state'],
+                'residence_lga' => $data['residence_lga'],
+                'residence_town' => $data['residence_town'],
                 'address' => $data['residence_AdressLine1'],
                 'photo' => $data['image'],
+                'signature' => $data['signature'],
+
             ]);
         } catch (\Exception $e) {
 

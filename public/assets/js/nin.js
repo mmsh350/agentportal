@@ -72,6 +72,11 @@ validationInfo.innerHTML = `
               <th>Middle Name</th>
               <td>${result.data.middlename ?? '—'}</td>
             </tr>
+
+             <tr>
+                     <th>Date of Birth</th>
+                     <td>${result.data.birthdate}</td>
+            </tr>
             <tr>
               <th>Phone No</th>
               <td>${result.data.telephoneno}</td>
