@@ -111,27 +111,8 @@
                                         <p class="mt-5">This section will display search results </p>
                                     </center>
                                 </div>
-                                {{-- <div class="col-md-12">
-                                    <div class="btn-list text-center" style="display:none;" id="download">
-                                        <div class="mb-2 mr-2">
-                                            <a href="#" id="standardSlip" type="button"
-                                                class="btn btn-primary btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})</a>
-                                        </div>
-                                        <div class="mb-2">
-                                            <a href="#" id="premiumSlip" type="button"
-                                                class="btn btn-secondary btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})</a>
-                                        </div>
-                                        <div class="mb-2">
-                                            <a href="#" id="regularSlip" type="button"
-                                                class="btn btn-info btn-wave"><i class="bi bi-download"></i>&nbsp;
-                                                Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})</a>
-                                        </div>
-                                    </div>
-                                </div> --}}
 
-                                <div class="col-md-12">
+                                {{-- <div class="col-md-12">
                                     <div class="text-center d-none" id="download">
                                         <div class="row justify-content-center">
                                             <div class="col-12 col-sm-6 col-md-4 mb-2">
@@ -155,11 +136,169 @@
                                                    Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})
                                                 </a>
                                             </div>
+
+                                            <div class="col-12 col-sm-6 col-md-4 mb-2">
+                                                <a href="#" id="basicSlip" type="button"
+                                                   class="btn btn-dark btn-wave w-100">
+                                                   <i class="bi bi-download"></i>&nbsp;
+                                                   Basic NIN Slip (&#x20A6;{{ $basic_nin_fee->amount }})
+                                                </a>
+                                             </div>
                                         </div>
+                                    </div>
+                                </div> --}}
+                                <div class="col-md-12">
+                                    <div class="btn-list d-flex flex-column flex-md-row justify-content-center align-items-center gap-2 d-none"  id="download">
+                                        <div>
+                                            <a href="#" id="standardSlip" type="button"
+                                                class="btn btn-primary btn-wave">
+                                                <i class="bi bi-download"></i>&nbsp;
+                                                Standard NIN Slip (&#x20A6;{{ $standard_nin_fee->amount }})
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="#" id="premiumSlip" type="button"
+                                                class="btn btn-secondary btn-wave">
+                                                <i class="bi bi-download"></i>&nbsp;
+                                                Premium NIN Slip (&#x20A6;{{ $premium_nin_fee->amount }})
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="#" id="regularSlip" type="button"
+                                                class="btn btn-info btn-wave">
+                                                <i class="bi bi-download"></i>&nbsp;
+                                                Regular NIN Slip (&#x20A6;{{ $regular_nin_fee->amount }})
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href="#" id="basicSlip" type="button"
+                                               class="btn btn-dark btn-wave w-100">
+                                               <i class="bi bi-download"></i>&nbsp;
+                                               Basic NIN Slip (&#x20A6;{{ $basic_nin_fee->amount }})
+                                            </a>
+                                         </div>
                                     </div>
                                 </div>
 
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12 mt-2">
+                    <div class="card custom-card">
+                        <div class="card-header justify-content-between">
+                            <div class="card-title m-0">
+                                <i class="ri-user-search-line fw-bold"></i> Verification History
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="col-md-12">
+                                @if (!$latestVerifications->isEmpty())
+                                    @php
+                                        $currentPage = $latestVerifications->currentPage();
+                                        $perPage = $latestVerifications->perPage();
+                                        $serialNumber = ($currentPage - 1) * $perPage + 1;
+                                    @endphp
+
+
+                                    {{-- Desktop Table --}}
+                                <div class="table-responsive d-none d-md-block">
+                                    <table class="table table-hover align-middle text-nowrap" style="background:#fafafc">
+                                        <thead class="thead-primary bg-primary text-white">
+                                            <tr>
+                                                <th width="5%">#</th>
+                                                <th>NIN Number</th>
+                                                <th>Tracking ID</th>
+                                                <th>Status</th>
+                                                <th>Download Slip</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($latestVerifications as $data)
+                                                <tr>
+                                                    <td>{{ $serialNumber++ }}</td>
+                                                    <td>{{ $data->idno }}</td>
+                                                    <td>{{ $data->trackingId }}</td>
+                                                    <td>
+                                                        <span class="badge bg-success text-white">Success</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
+                                                                    id="dropdownMenuButton{{ $data->id }}"
+                                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                Choose Type
+                                                            </button>
+                                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ $data->id }}">
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
+                                                                    <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
+                                                                </a>
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
+                                                                    <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
+                                                                </a>
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
+                                                                    <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
+                                                                </a>
+                                                                <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
+                                                                    <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                {{-- Mobile Cards --}}
+                                <div class="d-block d-md-none">
+                                    @foreach ($latestVerifications as $data)
+                                        <div class="card mb-3 shadow-sm">
+                                            <div class="card-body p-3">
+                                                <h6 class="mb-2">NIN: <strong>{{ $data->idno }}</strong></h6>
+                                                <p class="mb-1">Tracking ID: <strong>{{ $data->trackingId }}</strong></p>
+                                                <p class="mb-2">Status: <span class="badge bg-success text-white">Success</span></p>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-outline-primary btn-sm btn-block dropdown-toggle" type="button"
+                                                            id="dropdownMenuMobile{{ $data->id }}"
+                                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        Choose Download Type
+                                                    </button>
+                                                    <div class="dropdown-menu w-100" aria-labelledby="dropdownMenuMobile{{ $data->id }}">
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Regular">
+                                                            <i class="bi bi-download me-1"></i> Regular (&#x20A6;{{ $regular_nin_fee->amount }})
+                                                        </a>
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Standard">
+                                                            <i class="bi bi-download me-1"></i> Standard (&#x20A6;{{ $standard_nin_fee->amount }})
+                                                        </a>
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Premium">
+                                                            <i class="bi bi-download me-1"></i> Premium (&#x20A6;{{ $premium_nin_fee->amount }})
+                                                        </a>
+                                                        <a class="dropdown-item dropdown-option" href="#" data-id="{{ $data->idno }}" data-value="Basic">
+                                                            <i class="bi bi-download me-1"></i> Basic (&#x20A6;{{ $basic_nin_fee->amount }})
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+
+
+                                    <!-- Pagination Links -->
+                                    <div class="d-flex justify-content-center">
+                                        {{ $latestVerifications->links('vendor.pagination.bootstrap-4') }}
+                                    </div>
+                                @else
+                                    <div class="text-center">
+
+                                        <p class="fw-semibold fs-5 mt-3">No Request Available!</p>
+                                    </div>
+                                @endif
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -175,6 +314,7 @@
 
 @endsection
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets/js/nin-phone.js') }}"></script>
     <script>
         function checkPopupStatus() {
